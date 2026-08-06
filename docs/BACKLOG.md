@@ -4,6 +4,8 @@
 
 ### V-01 — Página da pessoa
 
+Como aluno que encontrou uma ideia interessante, quero ver a página de quem a publicou, para saber se temos interesses em comum antes de procurá-la.
+
 **Situação:** Mantida.
 
 **Justificativa:** A história segue o formato "Como... quero... para..." e possui critérios de aceitação claros, objetivos e verificáveis.
@@ -30,6 +32,8 @@
 ---
 
 ### V-03 — Publicar uma ideia
+
+Como aluno com uma ideia na cabeça, quero publicá-la sem depender de ninguém, para que ela exista antes de eu esquecer.
 
 **Situação:** Mantida.
 
@@ -58,6 +62,8 @@
 
 ### V-05 — Entrar e sair de um grupo
 
+Como aluno que quer se aproximar de um tema, quero entrar num grupo, para acompanhar o que se discute ali.****
+
 **Situação:** Mantida.
 
 **Justificativa:** A história apresenta critérios de aceitação claros e suficientes para validar sua implementação.
@@ -85,6 +91,8 @@
 
 ### V-07 — Registrar interesse em participar
 
+Como aluno que quer entrar num projeto, quero declarar interesse numa ideia, para que quem a propôs saiba que pode me chamar.
+
 **Situação:** Mantida.
 
 **Justificativa:** História bem definida, com critérios claros e mensuráveis.
@@ -93,43 +101,89 @@
 
 ### V-08 — Não perder o que foi escrito
 
+Como usuário, quero não perder o que escrevi, para não ter que digitar tudo de novo.
+
 **Situação:** Mantida.
 
 **Justificativa:** Os critérios de aceitação especificam exatamente o comportamento esperado e a tecnologia utilizada para persistência dos dados.
 
 ---
 
-### V-09 — Aviso de novo interessado
+## V-09 — Aviso de novo interessado
 
-**Situação:** Necessita refinamento.
+**Situação:** Corrigida.
 
-**Problema identificado:** A história depende de um sistema de notificações para celular, porém não especifica como essa funcionalidade será implementada nem quais tecnologias serão utilizadas.
+**Problema identificado:** A história depende de uma infraestrutura de notificações que não está especificada. Foi necessário deixar o comportamento esperado mais claro.
 
----
+**Versão corrigida:**
 
-### V-10 — Ideias paradas
+**Como** aluno que publicou uma ideia, **quero** ser avisado quando alguém demonstrar interesse nela **para** conseguir encontrar pessoas interessadas em participar.
 
-**Situação:** Incompleta.
+**Pronto quando:**
 
-**Justificativa:** Existe apenas o título da história, sem descrição nem critérios de aceitação.
-
----
-
-### V-11 — Relatório por curso
-
-**Situação:** Incompleta.
-
-**Justificativa:** Existe apenas o título da história, sem descrição nem critérios de aceitação.
+* ao registrar interesse em uma ideia, o autor recebe uma notificação no sistema;
+* a notificação informa o nome da pessoa interessada e o título da ideia;
+* a notificação direciona para a ideia correspondente;
+* a mesma pessoa não gera múltiplas notificações ao demonstrar interesse novamente.
 
 ---
 
-### V-12 — Exportar / importar o estado
+## V-10 — Ideias paradas
 
-**Situação:** Incompleta.
+**Situação:** Corrigida.
 
-**Justificativa:** Existe apenas o título da história, sem descrição nem critérios de aceitação.
+**Problema identificado:** A história possuía apenas um título, sem descrição do comportamento esperado.
+
+**Versão corrigida:**
+
+**Como** usuário do Viveiro, **quero** visualizar ideias que não receberam novas interações **para** identificar propostas que precisam de novos participantes ou contribuições.
+
+**Pronto quando:**
+
+* o sistema identifica ideias sem novas interações durante um período definido;
+* existe uma forma de visualizar essas ideias separadamente;
+* cada ideia exibida informa sua última atualização;
+* o usuário consegue acessar a página da ideia normalmente.
 
 ---
+
+## V-11 — Relatório por curso
+
+**Situação:** Corrigida.
+
+**Problema identificado:** A história possuía apenas o título, sem informar quais dados deveriam aparecer no relatório.
+
+**Versão corrigida:**
+
+**Como** administrador ou professor, **quero** visualizar um relatório de ideias por curso **para** acompanhar a participação de cada área da instituição.
+
+**Pronto quando:**
+
+* o sistema permite selecionar um curso;
+* o relatório apresenta a quantidade de ideias relacionadas ao curso selecionado;
+* o relatório apresenta informações básicas das ideias encontradas;
+* os dados exibidos correspondem aos dados cadastrados no sistema.
+
+---
+
+## V-12 — Exportar / importar o estado
+
+**Situação:** Corrigida.
+
+**Problema identificado:** A história não especificava quais dados seriam exportados ou importados.
+
+**Versão corrigida:**
+
+**Como** administrador do sistema, **quero** exportar e importar os dados do Viveiro **para** preservar o estado da aplicação e recuperar informações quando necessário.
+
+**Pronto quando:**
+
+* o sistema permite exportar os dados armazenados;
+* o arquivo exportado contém as informações necessárias do sistema;
+* o sistema permite importar um arquivo válido;
+* após a importação, os dados aparecem corretamente no sistema;
+* arquivos inválidos são recusados com uma mensagem de erro.
+
 
 ## Defeitos conhecidos
 
