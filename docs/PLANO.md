@@ -1,54 +1,59 @@
-# Plano da sprint — [nome da equipe] · base [V-?]
-
-> Preenchido na reunião de planejamento (30/07) e atualizado a cada encontro
-> pelo escriba. As seções seguem a ordem em que serão usadas.
+# Plano da sprint — E · base [V-01 a V-12]
 
 ## 1. Meta da sprint
 
-> Uma frase, verificável, acordada com o cliente. Tudo o que entrar no
-> compromisso deve servir a ela.
+Disponibilizar as principais funcionalidades de interação do Viveiro, permitindo que usuários visualizem ideias, publiquem novas ideias e participem de grupos.
 
-*(escrever aqui)*
+---
 
 ## 2. Compromisso
 
-> Preencher em 30/07 com a estimativa em horas. A coluna de reestimativa
-> só será preenchida em 13/08 — deixá-la vazia até lá.
+| ID   | História                  | Estimativa inicial (horas) | Reestimativa 13/08 (pontos) | Situação ao final |
+| ---- | ------------------------- | -------------------------: | --------------------------- | ----------------- |
+| V-01 | Página da pessoa          |                         6h |                             | Em planejamento   |
+| V-03 | Publicar uma ideia        |                         8h |                             | Em planejamento   |
+| V-05 | Entrar e sair de um grupo |                         8h |                             | Em planejamento   |
 
-| ID | História | Estimativa inicial (horas) | Reestimativa 13/08 (pontos) | Situação ao final |
-|---|---|---|---|---|
-| V-?? | | | | |
-| V-?? | | | | |
+**Capacidade assumida pela equipe:** 22 horas
 
-**Capacidade assumida pela equipe:** ____ horas
-(4 encontros + sessões extras previstas)
+(Considerando os encontros previstos e possíveis sessões extras.)
+
+---
 
 ## 3. Quadro
 
-> Atualizado a cada encontro. Mover a história inteira de uma lista para
-> outra; não fragmentar.
-
 ### A fazer
-- V-??
+
+* V-01 — Página da pessoa
+* V-03 — Publicar uma ideia
+* V-05 — Entrar e sair de um grupo
 
 ### Em andamento
-- V-??
+
+*(nenhuma história em andamento no momento)*
 
 ### Concluído
+
 *(critérios de aceitação verificados — ver PRONTO.md)*
 
-## 4. Registro da renegociação de escopo — 13/08
+---
 
-> Preencher durante a reunião com o cliente. Registrar o estado de fato,
-> não a versão que soa melhor.
+## 4. Registro da renegociação de escopo — 13/08
 
 **Comparação plano × realizado até aqui:**
 
 | ID | Estimado (h) | Gasto até 13/08 (h) | Observação |
-|---|---|---|---|
+| -- | -----------: | ------------------: | ---------- |
+|    |              |                     |            |
 
-**O que foi retirado do compromisso:** *(IDs e motivo)*
+**O que foi retirado do compromisso:**
 
-**O que o cliente decidiu:** *(registrar a decisão nas palavras em que foi dada)*
+*(Preencher caso alguma história seja removida.)*
 
-**A meta permanece alcançável?** *(sim/não, e por quê)*
+**O que o cliente decidiu:**
+
+*(Registrar a decisão tomada durante a reunião.)*
+
+**A meta permanece alcançável?**
+
+*(Preencher em 13/08 após a renegociação.)*
