@@ -73,7 +73,7 @@ Houve dúvidas sobre quais histórias deveriam ser reescritas e quais apenas man
 
 **Presentes:** João Pedro Santos Alves, Ryan P. Neres, Maria Julia, Yago A., Caio F. Borges & Nicolas Germano
 
-**Escriba:** [preencher]
+**Escriba:** Yago Armond
 
 **O que se pretendia:**
 
