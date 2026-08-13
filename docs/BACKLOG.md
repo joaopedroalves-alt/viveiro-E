@@ -1,5 +1,41 @@
 # BACKLOG.md
 
+A equipe realizou a leitura e análise da especificação herdada, classificando cada item do backlog de acordo com sua qualidade e completude.
+
+| ID   | Decisão   | Justificativa                                                                      |
+| ---- | --------- | ---------------------------------------------------------------------------------- |
+| V-01 | Manter    | História bem definida e com critérios de aceitação verificáveis.                   |
+| V-02 | Corrigir  | O critério "o filtro estiver funcionando" é vago e não permite validação objetiva. |
+| V-03 | Manter    | História clara, completa e testável.                                               |
+| V-04 | Corrigir  | Os critérios utilizam termos subjetivos como "amigável", "rápida" e "relevante".   |
+| V-05 | Manter    | Critérios claros e verificáveis.                                                   |
+| V-06 | Corrigir  | Não especifica o comportamento esperado dos estados da ideia.                      |
+| V-07 | Manter    | História adequada e com critérios objetivos.                                       |
+| V-08 | Manter    | Critérios claros e tecnologia de persistência especificada.                        |
+| V-09 | Refinar   | O mecanismo de notificação não está suficientemente detalhado.                     |
+| V-10 | Completar | A história possuía apenas o título.                                                |
+| V-11 | Completar | A história possuía apenas o título.                                                |
+| V-12 | Completar | A história possuía apenas o título.                                                |
+| B-01 | Manter    | Defeito descrito de forma clara e reproduzível.                                    |
+| B-02 | Manter    | Defeito descrito de forma clara e reproduzível.                                    |
+| B-03 | Manter    | Defeito descrito de forma clara e reproduzível.                                    |
+| B-04 | Manter    | Defeito descrito de forma clara e reproduzível.                                    |
+| B-05 | Manter    | Defeito descrito de forma clara e reproduzível.                                    |
+| B-06 | Manter    | Defeito descrito de forma clara e reproduzível.                                    |
+
+## Resultado da triagem
+
+Foram mantidas as histórias V-01, V-03, V-05, V-07 e V-08.
+
+Foram corrigidas as histórias V-02, V-04 e V-06 devido à presença de critérios de aceitação vagos ou subjetivos.
+
+A história V-09 foi refinada para tornar o comportamento esperado mais claro.
+
+As histórias V-10, V-11 e V-12 foram completadas, pois continham apenas títulos sem descrição ou critérios de aceitação.
+
+Os defeitos B-01 a B-06 foram mantidos sem alterações por apresentarem descrição suficiente para futura correção.
+
+
 ## Triagem da especificação herdada
 
 ### V-01 — Página da pessoa
