@@ -5,39 +5,58 @@
 Documento herdado. Escrito ao longo do 1º semestre de 2026 pela equipe anterior.
 Última alteração: 2026-05-28.
 
-## Triagem da especificação herdada
-
-A equipe realizou a leitura da especificação herdada e analisou as histórias de
-usuário e os defeitos conhecidos.
-
-As histórias foram classificadas conforme a necessidade de alteração e receberam
-uma estimativa de tamanho utilizando os valores definidos pela equipe:
-1, 2, 3, 5, 8 e 23.
-
-| ID | Pontos | Decisão | Justificativa |
-|---|---:|---|---|
-| V-01 | 5 | Manter | História clara e com critérios de aceitação verificáveis. |
-| V-02 | 3 | Corrigir | O critério "o filtro estiver funcionando" é vago e não permite verificar objetivamente a conclusão. |
-| V-03 | 5 | Manter | História completa, com objetivo claro e critérios verificáveis. |
-| V-04 | 8 | Corrigir | Os critérios "interface amigável", "busca rápida" e "resultado relevante" são subjetivos. |
-| V-05 | 8 | Manter | Possui critérios de aceitação claros e verificáveis. |
-| V-06 | 3 | Corrigir | O critério "os estados estiverem implementados" não define o comportamento esperado. |
-| V-07 | 5 | Manter | Possui critérios claros, objetivos e testáveis. |
-| V-08 | 3 | Manter | Define claramente o comportamento esperado para armazenamento e recuperação dos dados. |
-| V-09 | 8 | Refinar | A necessidade está clara, mas o comportamento da notificação precisa ser melhor especificado. |
-| V-10 | 5 | Completar | A história possuía somente o título. |
-| V-11 | 8 | Completar | A história possuía somente o título. |
-| V-12 | 8 | Completar | A história possuía somente o título. |
+> Algumas histórias passaram pela revisão do cliente e outras não. A equipe
+> realizou a triagem da especificação herdada antes de definir o compromisso
+> da sprint.
 
 ---
 
-# Histórias de usuário
+# 1. Triagem da especificação herdada
+
+A equipe analisou as histórias presentes na especificação herdada,
+identificando problemas de linguagem, critérios de aceitação e conformidade
+com as normas da instituição.
+
+Cinco histórias foram identificadas como defeituosas e precisam ser
+corrigidas antes de serem consideradas prontas:
+
+- V-02 — Filtro por curso
+- V-04 — Encontrar ideias que combinam comigo
+- V-06 — Estados da ideia
+- V-08 — Não perder o que foi escrito
+- V-09 — Aviso de novo interessado
+
+As demais histórias foram mantidas na triagem, pois não foram apontadas
+nos materiais fornecidos como pertencentes às cinco histórias defeituosas.
+
+## Critérios utilizados na triagem
+
+| ID | Problema identificado | Decisão |
+|---|---|---|
+| V-02 | Tarefa disfarçada de história, solução de interface prescrita e critério vazio. | Corrigir |
+| V-04 | Critérios de aceitação não verificáveis. | Corrigir |
+| V-06 | Persona genérica, finalidade circular e critério vazio. | Corrigir |
+| V-08 | Persona genérica e solução técnica prescrita no critério. | Corrigir |
+| V-09 | A história pressupõe uso de celular, contrariando a Norma 2. | Corrigir |
+| V-01 | Não foi apontada nos materiais como uma das cinco histórias defeituosas. | Manter |
+| V-03 | Não foi apontada nos materiais como uma das cinco histórias defeituosas. | Manter |
+| V-05 | Não foi apontada nos materiais como uma das cinco histórias defeituosas. | Manter |
+| V-07 | Não foi apontada nos materiais como uma das cinco histórias defeituosas. | Manter |
+| V-10 | A especificação herdada apresenta apenas o título. | Completar |
+| V-11 | A especificação herdada apresenta apenas o título. | Completar |
+| V-12 | A especificação herdada apresenta apenas o título. | Completar |
+
+> As estimativas em pontos devem ser definidas pela equipe durante a
+> negociação/planejamento. A sequência utilizada é:
+> **1, 2, 3, 5, 8, 23**.
+
+---
+
+# 2. Histórias de usuário
 
 ## V-01 — Página da pessoa
 
 **Situação:** Mantida.
-
-**Estimativa:** 5 pontos.
 
 Como aluno que encontrou uma ideia interessante, quero ver a página de quem a publicou, para saber se temos interesses em comum antes de procurá-la.
 
@@ -53,32 +72,37 @@ Como aluno que encontrou uma ideia interessante, quero ver a página de quem a p
 
 ## V-02 — Filtro por curso
 
-**Situação:** Corrigida.
+**Situação:** Corrigir.
 
-**Estimativa:** 3 pontos.
+### Problemas identificados
 
-### Problema identificado
+A versão herdada não era uma história de usuário:
 
-O critério original "o filtro estiver funcionando" é vago e não permite verificar objetivamente quando a história está concluída.
+> "Implementar filtro por curso na barra lateral do mural."
 
-### História corrigida
+O texto começa com um verbo no infinitivo e funciona como uma tarefa. Além disso,
+"barra lateral" é uma decisão de interface e não uma necessidade do usuário.
 
-Como visitante do mural, quero filtrar as ideias por curso, para visualizar apenas as ideias do curso desejado.
+O critério "o filtro estiver funcionando" também não é verificável.
+
+### História a ser corrigida
+
+Como **[persona a validar]**, quero filtrar as ideias por curso, para **[finalidade a validar]**.
 
 ### Pronto quando:
 
-- existe um filtro por curso na barra lateral do mural;
-- ao selecionar um curso, apenas ideias daquele curso são exibidas;
-- é possível remover o filtro e voltar a visualizar todas as ideias;
-- a quantidade de ideias exibidas é atualizada corretamente.
+- o filtro permite selecionar um curso;
+- após selecionar um curso, somente as ideias correspondentes ao curso são exibidas;
+- é possível remover o filtro e voltar à visualização das ideias sem o filtro.
+
+> A persona e a finalidade devem ser validadas pela equipe/cliente antes de
+> considerar a história pronta.
 
 ---
 
 ## V-03 — Publicar uma ideia
 
 **Situação:** Mantida.
-
-**Estimativa:** 5 pontos.
 
 Como aluno com uma ideia na cabeça, quero publicá-la sem depender de ninguém, para que ela exista antes de eu esquecer.
 
@@ -94,32 +118,41 @@ Como aluno com uma ideia na cabeça, quero publicá-la sem depender de ninguém,
 
 ## V-04 — Encontrar ideias que combinam comigo
 
-**Situação:** Corrigida.
+**Situação:** Corrigir.
 
-**Estimativa:** 8 pontos.
+Como visitante do mural, quero encontrar rapidamente as ideias que combinam comigo, para não perder tempo.
 
-### Problema identificado
+### Problemas identificados
 
-Os critérios originais utilizam termos subjetivos, como "interface amigável", "busca rápida" e "resultado relevante". Esses termos não permitem uma verificação objetiva.
+Os critérios herdados eram:
 
-### História corrigida
+- "a interface estiver amigável";
+- "a busca for rápida";
+- "o resultado for relevante".
 
-Como visitante do mural, quero pesquisar ideias por palavras-chave, para encontrar projetos de meu interesse.
+Esses critérios não são verificáveis.
+
+"Amigável" não define um comportamento observável.
+
+"Rápida" não possui uma medida ou comportamento definido.
+
+"Relevante" apenas repete a finalidade da própria história.
+
+### História a ser corrigida
+
+Como visitante do mural, quero encontrar ideias por meio da busca, para não perder tempo procurando manualmente.
 
 ### Pronto quando:
 
-- existe um campo de busca no mural;
-- a busca considera título, resumo e tags;
-- apenas as ideias correspondentes à busca são exibidas;
-- quando nenhuma ideia é encontrada, uma mensagem informa que não existem resultados.
+- a busca apresenta as ideias que correspondem ao texto pesquisado;
+- a busca considera pelo menos o título e o resumo da ideia;
+- quando nenhuma ideia corresponde à busca, é exibida uma mensagem informando que nenhuma ideia foi encontrada.
 
 ---
 
 ## V-05 — Entrar e sair de um grupo
 
 **Situação:** Mantida.
-
-**Estimativa:** 8 pontos.
 
 Como aluno que quer se aproximar de um tema, quero entrar num grupo, para acompanhar o que se discute ali.
 
@@ -135,32 +168,48 @@ Como aluno que quer se aproximar de um tema, quero entrar num grupo, para acompa
 
 ## V-06 — Estados da ideia
 
-**Situação:** Corrigida.
+**Situação:** Corrigir.
 
-**Estimativa:** 3 pontos.
+### Problemas identificados
 
-### Problema identificado
+A história herdada utiliza "usuário" como persona, sem identificar quem realmente
+precisa da funcionalidade.
 
-O critério original "os estados estiverem implementados" não define quais comportamentos devem ser atendidos para considerar a história concluída.
+Além disso, a finalidade é circular:
 
-### História corrigida
+> "quero que as ideias tenham estados, para que os estados das ideias fiquem registrados."
 
-Como usuário, quero que as ideias tenham estados, para acompanhar sua evolução.
+O critério:
+
+> "os estados estiverem implementados"
+
+também não permite verificar quando a história está pronta.
+
+Os três estados mencionados anteriormente são:
+
+- semente;
+- germinando;
+- proposta.
+
+### História a ser corrigida
+
+Como **[persona a validar]**, quero acompanhar o estado de uma ideia, para **[finalidade a validar]**.
 
 ### Pronto quando:
 
-- toda ideia possui um estado;
-- os estados possíveis são "Semente", "Germinando" e "Proposta";
-- o estado atual é exibido no cartão da ideia;
-- é possível alterar o estado da ideia.
+- os estados possíveis da ideia estão definidos;
+- os estados são "semente", "germinando" e "proposta";
+- o estado atual da ideia pode ser identificado no sistema;
+- estão definidas as regras para mudança de um estado para outro.
+
+> É necessário definir com o cliente quem deve alterar o estado, quando a
+> alteração pode ocorrer e quais transições são permitidas.
 
 ---
 
 ## V-07 — Registrar interesse em participar
 
 **Situação:** Mantida.
-
-**Estimativa:** 5 pontos.
 
 Como aluno que quer entrar num projeto, quero declarar interesse numa ideia, para que quem a propôs saiba que pode me chamar.
 
@@ -176,129 +225,214 @@ Como aluno que quer entrar num projeto, quero declarar interesse numa ideia, par
 
 ## V-08 — Não perder o que foi escrito
 
-**Situação:** Mantida.
-
-**Estimativa:** 3 pontos.
+**Situação:** Corrigir.
 
 Como usuário, quero não perder o que escrevi, para não ter que digitar tudo de novo.
 
+### Problemas identificados
+
+A persona "usuário" é genérica e não identifica quem sofre com a perda.
+
+Além disso, o critério original prescreve uma solução técnica:
+
+> `localStorage` usando `JSON.stringify`
+
+Isso é uma decisão de implementação e não um resultado observável.
+
+### História a ser corrigida
+
+Como **[persona a validar]**, quero que o que criei permaneça disponível quando eu voltar ao sistema, para não precisar digitar tudo novamente.
+
 ### Pronto quando:
 
-- os dados forem salvos em localStorage usando JSON.stringify;
-- os dados forem recuperados no carregamento da página.
+- uma informação criada pelo usuário permanece disponível após fechar o navegador;
+- ao abrir novamente o sistema, a informação criada anteriormente pode ser encontrada;
+- o conteúdo recuperado corresponde ao que havia sido criado anteriormente.
 
 ---
 
 ## V-09 — Aviso de novo interessado
 
-**Situação:** Refinada.
-
-**Estimativa:** 8 pontos.
+**Situação:** Corrigir.
 
 ### Problema identificado
 
-A história original especificava uma notificação no celular, mas o comportamento necessário precisava ser melhor definido.
+A história herdada exige uma notificação no celular:
 
-### História refinada
+> "quero receber uma notificação no celular"
 
-Como aluno com uma ideia publicada, quero receber um aviso quando alguém demonstrar interesse, para não perder a oportunidade de formar um grupo.
+e também possui critérios que dependem desse mecanismo:
+
+- receber uma notificação no celular;
+- tocar na notificação;
+- abrir a ideia pela notificação.
+
+Segundo o material fornecido, isso **fere a Norma 2**, que não permite que uma
+funcionalidade pressuponha o uso de celular na escola.
+
+Portanto, não basta apenas alterar o título. O mecanismo vedado precisa ser
+retirado de toda a história.
+
+### História a ser corrigida
+
+Como aluno com uma ideia publicada, quero saber quando alguém demonstrar interesse em participar, para não perder a oportunidade de formar um grupo.
 
 ### Pronto quando:
 
-- ao registrar interesse, o autor recebe uma notificação;
-- a notificação mostra o nome de quem demonstrou interesse;
-- a notificação mostra o título da ideia;
-- tocar na notificação abre a ideia correspondente;
-- uma mesma pessoa não gera múltiplas notificações para o mesmo interesse.
+- quando alguém demonstrar interesse em uma ideia, o autor consegue identificar que houve um novo interessado;
+- o autor consegue identificar o nome de quem demonstrou interesse;
+- o autor consegue identificar a ideia em que o interesse foi registrado;
+- a informação pode ser consultada pelo sistema sem depender do uso de celular.
+
+> A forma exata de apresentar essa informação deve ser definida pela equipe,
+> respeitando a Norma 2.
 
 ---
 
 ## V-10 — Ideias paradas
 
-**Situação:** Completada.
+**Situação:** Completar.
 
-**Estimativa:** 5 pontos.
+A especificação herdada apresentava somente o título:
 
-Como usuário do Viveiro, quero visualizar ideias que não receberam novas interações, para identificar propostas que precisam de novos participantes ou contribuições.
+> "ideias paradas"
+
+### História a ser definida pela equipe
+
+Como **[persona a validar]**, quero identificar ideias que estão paradas, para **[finalidade a validar]**.
 
 ### Pronto quando:
 
-- o sistema identifica ideias sem novas interações durante um período definido;
-- existe uma forma de visualizar essas ideias separadamente;
-- cada ideia exibida informa sua última atualização;
-- o usuário consegue acessar a ideia normalmente.
+- estiver definido o que caracteriza uma ideia como "parada";
+- estiver definido onde essas ideias serão apresentadas;
+- for possível identificar no sistema quais ideias atendem à condição definida.
+
+> A definição exata de "ideia parada" precisa ser validada pela equipe/cliente.
 
 ---
 
 ## V-11 — Relatório por curso
 
-**Situação:** Completada.
+**Situação:** Completar.
 
-**Estimativa:** 8 pontos.
+A especificação herdada apresentava somente o título:
 
-Como administrador ou professor, quero visualizar um relatório de ideias por curso, para acompanhar a participação de cada área da instituição.
+> "relatório por curso"
+
+### História a ser definida pela equipe
+
+Como **[persona a validar]**, quero visualizar informações das ideias organizadas por curso, para **[finalidade a validar]**.
 
 ### Pronto quando:
 
-- o sistema permite selecionar um curso;
-- o relatório apresenta a quantidade de ideias relacionadas ao curso selecionado;
-- o relatório apresenta informações básicas das ideias encontradas;
-- os dados exibidos correspondem aos dados cadastrados no sistema.
+- estiver definido quais informações o relatório deve apresentar;
+- for possível selecionar ou identificar um curso;
+- o relatório apresentar os dados correspondentes ao curso selecionado;
+- os dados apresentados corresponderem às informações existentes no sistema.
+
+> O conteúdo e a finalidade exatos do relatório precisam ser validados pela
+> equipe/cliente.
 
 ---
 
 ## V-12 — Exportar / importar o estado
 
-**Situação:** Completada.
+**Situação:** Completar.
 
-**Estimativa:** 8 pontos.
+A especificação herdada apresentava somente o título:
 
-Como administrador do sistema, quero exportar e importar os dados do Viveiro, para preservar o estado da aplicação e recuperar informações quando necessário.
+> "exportar / importar o estado"
+
+### História a ser definida pela equipe
+
+Como **[persona a validar]**, quero exportar e importar o estado do Viveiro, para **[finalidade a validar]**.
 
 ### Pronto quando:
 
-- o sistema permite exportar os dados armazenados;
-- o arquivo exportado contém as informações necessárias do sistema;
-- o sistema permite importar um arquivo válido;
-- após a importação, os dados aparecem corretamente no sistema;
-- arquivos inválidos são recusados com uma mensagem de erro.
+- estiver definido quais dados fazem parte do estado a ser exportado;
+- for possível exportar o estado definido;
+- for possível importar um estado válido;
+- os dados importados forem recuperados corretamente no sistema;
+- estados inválidos forem identificados e recusados.
+
+> O formato de exportação e importação é uma decisão técnica e deve ser
+> definido pela equipe depois que a necessidade estiver estabelecida.
 
 ---
 
-# Defeitos conhecidos
+# 3. Defeitos conhecidos
 
-Os defeitos abaixo foram mantidos durante a triagem porque estão descritos de forma suficientemente clara para serem reproduzidos e corrigidos posteriormente.
+Os defeitos abaixo foram identificados no sistema existente.
 
-## B-01 — Filtro por tag não pode ser desfeito
-
-Depois de clicar em uma tag, não há como desfazer o filtro; só recarregando a página.
-
----
-
-## B-02 — Busca sem resultados
-
-Quando a busca não encontra nada, o mural fica em branco, sem nenhuma explicação.
+A ficha de apoio apresenta o caminho técnico para sua correção. Entretanto,
+corrigir o defeito não significa automaticamente que ele fará parte da
+Sprint. A equipe deve decidir quais defeitos entram no compromisso, em que
+ordem e com qual critério de pronto.
 
 ---
 
-## B-03 — Formato da data
+## B-01 — Não há como desfazer o filtro de etiqueta
 
-A data aparece como `2026-03-14` em vez de `14/03/2026`.
+**Sintoma:** Depois de clicar em uma etiqueta, o mural fica preso nela. Só
+recarregando a página.
+
+**Local:** `src/app.js`, na função `desenharMural`, no trecho do aviso de filtro.
+
+**Correção indicada:**
+
+Quando existir uma etiqueta selecionada, deve existir uma forma de limpar o
+filtro.
+
+Uma possibilidade indicada pela ficha é adicionar um botão "limpar filtro"
+que:
+
+- define `estado.tag = null`;
+- chama `desenharMural()` novamente.
+
+Também é possível desligar o filtro clicando novamente na mesma etiqueta,
+mas essa alternativa deve ser escolhida e registrada pela equipe.
+
+**Conferência:**
+
+Clicar em uma etiqueta e depois em "limpar filtro" deve fazer as ideias
+voltarem a ser exibidas.
 
 ---
 
-## B-04 — Busca não considera acentuação
+## B-02 — Busca sem resultado deixa o mural em branco
 
-Buscar `robotica` não encontra "Robótica"; buscar `Musica` não encontra "música".
+**Sintoma:** Ao buscar algo que não existe, a área dos cartões fica vazia,
+sem nenhuma explicação.
+
+**Local:** `src/app.js`, na função `desenharMural`.
+
+**Correção indicada:**
+
+Quando a lista de ideias visíveis estiver vazia, deve ser exibida uma mensagem
+como:
+
+> "Nenhuma ideia encontrada."
+
+**Conferência:**
+
+Pesquisar uma palavra inexistente deve mostrar a mensagem no lugar dos cartões.
 
 ---
 
-## B-05 — Contagem de apoios não atualiza imediatamente
+## B-03 — A data aparece em formato de máquina
 
-O número de apoios no cartão só muda depois que se refaz a busca.
+**Sintoma:** O cartão mostra `2026-03-14` em vez de `14/03/2026`.
 
----
+**Local:** `src/app.js`, na função `montarCartao`.
 
-## B-06 — Título comprido ultrapassa o cartão
+**Correção indicada:**
 
-Título comprido vaza para fora do cartão e atravessa o cartão vizinho.
+Criar uma conversão entre o formato armazenado e o formato exibido.
+
+A ficha apresenta a função:
+
+```javascript
+function dataBonita(iso) {
+    var partes = iso.split("-");
+    return partes[2] + "/" + partes[1] + "/" + partes[0];
+}
