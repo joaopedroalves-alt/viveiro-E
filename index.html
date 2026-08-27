@@ -6,6 +6,7 @@
 <title>Viveiro — berçário de ideias</title>
 <link rel="stylesheet" href="src/estilo.css">
 </head>
+
 <body>
 
 <header>
@@ -13,6 +14,7 @@
     <h1>Viveiro</h1>
     <span class="lema">onde as ideias crescem antes de virar projeto</span>
   </div>
+
   <div class="sessao">
     <label for="quem">navegando como</label>
     <select id="quem"></select>
@@ -25,20 +27,61 @@
 </nav>
 
 <main>
-  <!-- ------------------------------ MURAL ------------------------------ -->
+
+  <!-- ============================== MURAL ============================== -->
+
   <section id="mural">
+
+    <h2>Mural de ideias</h2>
+
     <div class="barra">
-      <input id="busca" type="search" placeholder="buscar por título ou resumo...">
+
+      <label for="busca" class="escondido">
+        Buscar ideias
+      </label>
+
+      <input
+        id="busca"
+        type="search"
+        placeholder="buscar por título ou resumo..."
+        autocomplete="off">
+
       <span id="contagem" class="contagem"></span>
+
     </div>
+
     <p id="filtro-ativo" class="filtro-ativo"></p>
+
+    <p id="mensagem" class="mensagem"></p>
+
     <div id="cartoes" class="cartoes"></div>
+
   </section>
 
-  <!-- ------------------------------ GRUPOS ----------------------------- -->
+
+  <!-- ============================== GRUPOS ============================= -->
+
   <section id="grupos" class="escondido">
+
+    <h2>Grupos do Viveiro</h2>
+
     <ul id="lista-grupos" class="lista-grupos"></ul>
+
   </section>
+
+
+  <!-- ============================ PERFIL =============================== -->
+
+  <section id="perfil" class="escondido">
+
+    <button id="voltar-mural" class="voltar">
+      ← voltar ao mural
+    </button>
+
+    <div id="conteudo-perfil"></div>
+
+  </section>
+
 </main>
 
 <footer>
@@ -46,7 +89,9 @@
   <span id="base" class="base"></span>
 </footer>
 
+
 <script src="dados/dados_E.js"></script>
 <script src="src/app.js"></script>
+
 </body>
 </html>
