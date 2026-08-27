@@ -106,6 +106,44 @@ Foi necessário definir como classificar as histórias que estavam incompletas n
 
 ---
 
-## Sessão extra — 13/08
+## Encontro 4 — 27/08 (aula)
+
+**Presentes:** João Pedro Santos Alves, Ryan P. Neres, Maria Julia, Yago A. & Caio F. Borges
+
+**Escriba:** Ryan
+
+**O que se pretendia:**
+
+Começar a implementação das funcionalidades escolhidas para a Sprint, realizando alterações no site pré-pronto do Viveiro.
+
+**O que se realizou:**
+
+A equipe trabalhou no site pré-pronto do Viveiro, analisando seu funcionamento e realizando as alterações necessárias para implementar as histórias selecionadas para a Sprint.
+
+Foram realizados testes no sistema após as alterações para verificar o funcionamento das funcionalidades trabalhadas.
+
+**Tempo gasto por história:**
+
+| ID | Quem trabalhou | Tempo (min) |
+|---|---|---:|
+| V-06 | João P. Santos | 1h |
+| V-01 | Caio | 30 min |
+| V-04 | Yago | 30min |
+| Correções no site | E | 2h |
+
+**Impedimentos encontrados:**
+
+Durante a implementação, a equipe encontrou problemas para reuso e manejo do site com o código antigo.
+
+**Decisões tomadas:**
+
+* Utilizar o site pré-pronto como base para a implementação.
+* Realizar testes no navegador após as alterações.
+* Corrigir os problemas encontrados durante os testes.
+* Registrar no quadro o andamento das histórias trabalhadas.
+
+---
+
+## Sessão extra — [data]
 
 **Não houve sessão extra nesta semana.**
