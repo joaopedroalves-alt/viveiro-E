@@ -28,15 +28,13 @@
 
 <main>
 
+  <!-- MURAL -->
   <section id="mural">
 
     <h2>Mural de ideias</h2>
 
     <div class="barra">
-
-      <label for="busca" class="escondido">
-        Buscar ideias
-      </label>
+      <label for="busca" class="escondido">Buscar ideias</label>
 
       <input
         id="busca"
@@ -45,7 +43,6 @@
         autocomplete="off">
 
       <span id="contagem" class="contagem"></span>
-
     </div>
 
     <p id="filtro-ativo" class="filtro-ativo"></p>
@@ -55,22 +52,28 @@
   </section>
 
 
-  <section id="grupos" class="escondido">
-
-    <h2>Grupos do Viveiro</h2>
-
-    <ul id="lista-grupos" class="lista-grupos"></ul>
-
-  </section>
-
-
-  <section id="perfil" class="escondido">
+  <!-- PÁGINA DA PESSOA -->
+  <section id="pessoa" class="escondido">
 
     <button id="voltar-mural" class="voltar">
       ← voltar ao mural
     </button>
 
-    <div id="conteudo-perfil"></div>
+    <div id="perfil-pessoa" class="perfil"></div>
+
+    <h2>Ideias publicadas</h2>
+
+    <div id="ideias-pessoa" class="cartoes"></div>
+
+  </section>
+
+
+  <!-- GRUPOS -->
+  <section id="grupos" class="escondido">
+
+    <h2>Grupos do Viveiro</h2>
+
+    <ul id="lista-grupos" class="lista-grupos"></ul>
 
   </section>
 
