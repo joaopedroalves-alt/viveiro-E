@@ -9,9 +9,9 @@
 */
 
 var estado = {
-  pessoa: null,      // id da pessoa que está navegando
-  busca: "",         // texto digitado
-  tag: null,         // tag clicada, se houver
+  pessoa: null,
+  busca: "",
+  tag: null,
   aba: "mural"
 };
 
@@ -36,21 +36,29 @@ function ideiaPorId(id) {
   return null;
 }
 
+/* ------------------------------------------------ normalização */
+
+function normalizar(texto) {
+  return texto.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 /* ------------------------------------------------------- filtragem */
 
 function ideiasVisiveis() {
   var resultado = [];
+
   for (var i = 0; i < DADOS.ideias.length; i++) {
     var ideia = DADOS.ideias[i];
 
-    // filtro por texto
     var casaTexto = true;
     if (estado.busca !== "") {
-      casaTexto = ideia.titulo.includes(estado.busca) ||
-                  ideia.resumo.includes(estado.busca);
+      casaTexto =
+        normalizar(ideia.titulo).includes(normalizar(estado.busca)) ||
+        normalizar(ideia.resumo).includes(normalizar(estado.busca));
     }
 
-    // filtro por tag
     var casaTag = true;
     if (estado.tag !== null) {
       casaTag = ideia.tags.indexOf(estado.tag) >= 0;
@@ -58,6 +66,7 @@ function ideiasVisiveis() {
 
     if (casaTexto && casaTag) resultado.push(ideia);
   }
+
   return resultado;
 }
 
@@ -72,7 +81,8 @@ function desenhar() {
 
 function desenharSeletorDePessoas() {
   var alvo = document.getElementById("quem");
-  if (alvo.options.length > 0) return;   // só monta uma vez
+  if (alvo.options.length > 0) return;
+
   for (var i = 0; i < DADOS.pessoas.length; i++) {
     var p = DADOS.pessoas[i];
     var opcao = document.createElement("option");
@@ -80,6 +90,7 @@ function desenharSeletorDePessoas() {
     opcao.textContent = p.nome + " (" + p.curso + ")";
     alvo.appendChild(opcao);
   }
+
   alvo.value = estado.pessoa;
 }
 
@@ -92,15 +103,41 @@ function desenharMural() {
     alvo.appendChild(montarCartao(lista[i]));
   }
 
+  /* B-02: informa quando a busca não encontrou ideias. */
+  if (lista.length === 0) {
+    var vazio = document.createElement("p");
+    vazio.textContent = "Nenhuma ideia encontrada.";
+    alvo.appendChild(vazio);
+  }
+
   document.getElementById("contagem").textContent =
     lista.length + " de " + DADOS.ideias.length + " ideias";
 
   var aviso = document.getElementById("filtro-ativo");
+
+  /* B-01: permite desfazer o filtro de etiqueta. */
   if (estado.tag !== null) {
-    aviso.textContent = "mostrando apenas ideias com a etiqueta: " + estado.tag;
+    aviso.textContent =
+      "mostrando apenas ideias com a etiqueta: " + estado.tag + " ";
+
+    var limpar = document.createElement("button");
+    limpar.textContent = "limpar filtro";
+
+    limpar.onclick = function () {
+      estado.tag = null;
+      desenharMural();
+    };
+
+    aviso.appendChild(limpar);
   } else {
     aviso.textContent = "";
   }
+}
+
+/* B-03: transforma a data armazenada em ISO para o formato exibido. */
+function dataBonita(iso) {
+  var partes = iso.split("-");
+  return partes[2] + "/" + partes[1] + "/" + partes[0];
 }
 
 function montarCartao(ideia) {
@@ -113,7 +150,7 @@ function montarCartao(ideia) {
 
   var autoria = document.createElement("div");
   autoria.className = "autoria";
-  autoria.textContent = nomeDe(ideia.autor) + " · " + ideia.data;
+  autoria.textContent = nomeDe(ideia.autor) + " · " + dataBonita(ideia.data);
   cartao.appendChild(autoria);
 
   var resumo = document.createElement("p");
@@ -123,6 +160,7 @@ function montarCartao(ideia) {
 
   var tags = document.createElement("div");
   tags.className = "tags";
+
   for (var i = 0; i < ideia.tags.length; i++) {
     var etiqueta = document.createElement("span");
     etiqueta.className = "etiqueta";
@@ -130,6 +168,7 @@ function montarCartao(ideia) {
     etiqueta.onclick = criarCliqueDeTag(ideia.tags[i]);
     tags.appendChild(etiqueta);
   }
+
   cartao.appendChild(tags);
 
   var rodape = document.createElement("div");
@@ -147,12 +186,14 @@ function montarCartao(ideia) {
   rodape.appendChild(contador);
 
   cartao.appendChild(rodape);
+
   return cartao;
 }
 
 function desenharGrupos() {
   var alvo = document.getElementById("lista-grupos");
   alvo.innerHTML = "";
+
   for (var i = 0; i < DADOS.grupos.length; i++) {
     var g = DADOS.grupos[i];
     var item = document.createElement("li");
@@ -189,15 +230,26 @@ function criarCliqueDeApoio(idIdeia) {
   return function () {
     var ideia = ideiaPorId(idIdeia);
     ideia.apoios = ideia.apoios + 1;
+
+    /* B-05: atualiza a tela imediatamente após alterar o dado. */
+    desenharMural();
   };
 }
 
 function trocarAba(qual) {
   estado.aba = qual;
-  document.getElementById("mural").className = (qual === "mural") ? "" : "escondido";
-  document.getElementById("grupos").className = (qual === "grupos") ? "" : "escondido";
-  document.getElementById("aba-mural").className = (qual === "mural") ? "aba ativa" : "aba";
-  document.getElementById("aba-grupos").className = (qual === "grupos") ? "aba ativa" : "aba";
+
+  document.getElementById("mural").className =
+    (qual === "mural") ? "" : "escondido";
+
+  document.getElementById("grupos").className =
+    (qual === "grupos") ? "" : "escondido";
+
+  document.getElementById("aba-mural").className =
+    (qual === "mural") ? "aba ativa" : "aba";
+
+  document.getElementById("aba-grupos").className =
+    (qual === "grupos") ? "aba ativa" : "aba";
 }
 
 /* --------------------------------------------------------- início */
@@ -214,8 +266,13 @@ function iniciar() {
     estado.pessoa = Number(e.target.value);
   };
 
-  document.getElementById("aba-mural").onclick  = function () { trocarAba("mural"); };
-  document.getElementById("aba-grupos").onclick = function () { trocarAba("grupos"); };
+  document.getElementById("aba-mural").onclick = function () {
+    trocarAba("mural");
+  };
+
+  document.getElementById("aba-grupos").onclick = function () {
+    trocarAba("grupos");
+  };
 
   desenhar();
 }
