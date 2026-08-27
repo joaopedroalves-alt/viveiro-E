@@ -1,31 +1,21 @@
-/* Viveiro — lógica da página
-   Histórias implementadas:
-   V-01 — Página da pessoa
-   V-04 — Encontrar ideias que combinam comigo
-   V-06 — Estados da ideia
-*/
+/* Viveiro — lógica da página */
 
 var estado = {
   pessoa: null,
   busca: "",
   tag: null,
   aba: "mural",
-  perfil: null
+  pessoaAberta: null
 };
 
 
-/* =========================================================
-   ATALHOS AOS DADOS
-   ========================================================= */
+/* ------------------------------------------------ atalhos aos dados */
 
 function pessoaPorId(id) {
-
   for (var i = 0; i < DADOS.pessoas.length; i++) {
-
     if (DADOS.pessoas[i].id === id) {
       return DADOS.pessoas[i];
     }
-
   }
 
   return null;
@@ -33,7 +23,6 @@ function pessoaPorId(id) {
 
 
 function nomeDe(id) {
-
   var p = pessoaPorId(id);
 
   return p ? p.nome : "(desconhecido)";
@@ -41,36 +30,27 @@ function nomeDe(id) {
 
 
 function ideiaPorId(id) {
-
   for (var i = 0; i < DADOS.ideias.length; i++) {
-
     if (DADOS.ideias[i].id === id) {
       return DADOS.ideias[i];
     }
-
   }
 
   return null;
 }
 
 
-/* =========================================================
-   NORMALIZAÇÃO
-   ========================================================= */
+/* ------------------------------------------------ normalização */
 
 function normalizar(texto) {
-
   return texto
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
-
 }
 
 
-/* =========================================================
-   V-04 — BUSCA
-   ========================================================= */
+/* ------------------------------------------------ filtragem */
 
 function ideiasVisiveis() {
 
@@ -89,57 +69,61 @@ function ideiasVisiveis() {
       casaTexto =
         normalizar(ideia.titulo).includes(busca) ||
         normalizar(ideia.resumo).includes(busca);
-
     }
 
 
     var casaTag = true;
 
     if (estado.tag !== null) {
-
-      casaTag =
-        ideia.tags.indexOf(estado.tag) >= 0;
-
+      casaTag = ideia.tags.indexOf(estado.tag) >= 0;
     }
 
 
     if (casaTexto && casaTag) {
       resultado.push(ideia);
     }
-
   }
 
   return resultado;
 }
 
 
-/* =========================================================
-   DESENHO
-   ========================================================= */
+/* ------------------------------------------------ data */
+
+function dataBonita(iso) {
+
+  var partes = iso.split("-");
+
+  return partes[2] + "/" + partes[1] + "/" + partes[0];
+}
+
+
+/* ------------------------------------------------ desenho geral */
 
 function desenhar() {
 
   desenharSeletorDePessoas();
+
   desenharMural();
+
   desenharGrupos();
 
   document.getElementById("base").textContent =
     "base " + DADOS.codigo;
-
 }
 
 
-/* =========================================================
-   SELETOR DE PESSOAS
-   ========================================================= */
+/* ------------------------------------------------ seletor */
 
 function desenharSeletorDePessoas() {
 
   var alvo = document.getElementById("quem");
 
   if (alvo.options.length > 0) {
+    alvo.value = estado.pessoa;
     return;
   }
+
 
   for (var i = 0; i < DADOS.pessoas.length; i++) {
 
@@ -153,17 +137,14 @@ function desenharSeletorDePessoas() {
       p.nome + " (" + p.curso + ")";
 
     alvo.appendChild(opcao);
-
   }
 
-  alvo.value = estado.pessoa;
 
+  alvo.value = estado.pessoa;
 }
 
 
-/* =========================================================
-   MURAL
-   ========================================================= */
+/* ------------------------------------------------ mural */
 
 function desenharMural() {
 
@@ -179,23 +160,20 @@ function desenharMural() {
     alvo.appendChild(
       montarCartao(lista[i])
     );
-
   }
 
 
   /* B-02 */
-
   if (lista.length === 0) {
 
     var vazio = document.createElement("p");
 
-    vazio.className = "vazio";
+    vazio.className = "mensagem";
 
     vazio.textContent =
       "Nenhuma ideia encontrada.";
 
     alvo.appendChild(vazio);
-
   }
 
 
@@ -206,11 +184,11 @@ function desenharMural() {
     " ideias";
 
 
-  /* B-01 */
-
   var aviso =
     document.getElementById("filtro-ativo");
 
+
+  /* B-01 */
 
   if (estado.tag !== null) {
 
@@ -223,8 +201,6 @@ function desenharMural() {
     var limpar =
       document.createElement("button");
 
-    limpar.className = "limpar";
-
     limpar.textContent =
       "limpar filtro";
 
@@ -234,7 +210,6 @@ function desenharMural() {
       estado.tag = null;
 
       desenharMural();
-
     };
 
 
@@ -243,56 +218,11 @@ function desenharMural() {
   } else {
 
     aviso.textContent = "";
-
   }
-
 }
 
 
-/* =========================================================
-   DATA
-   ========================================================= */
-
-function dataBonita(iso) {
-
-  var partes = iso.split("-");
-
-  return (
-    partes[2] +
-    "/" +
-    partes[1] +
-    "/" +
-    partes[0]
-  );
-
-}
-
-
-/* =========================================================
-   V-06 — ESTADO DA IDEIA
-   ========================================================= */
-
-function estadoBonito(estadoAtual) {
-
-  if (estadoAtual === "semente") {
-    return "Semente";
-  }
-
-  if (estadoAtual === "germinando") {
-    return "Germinando";
-  }
-
-  if (estadoAtual === "proposta") {
-    return "Proposta";
-  }
-
-  return "Semente";
-}
-
-
-/* =========================================================
-   CARTÃO
-   ========================================================= */
+/* ------------------------------------------------ cartão */
 
 function montarCartao(ideia) {
 
@@ -302,7 +232,7 @@ function montarCartao(ideia) {
   cartao.className = "cartao";
 
 
-  /* título */
+  /* V-01 — nome do autor clicável */
 
   var titulo =
     document.createElement("h3");
@@ -310,25 +240,13 @@ function montarCartao(ideia) {
   titulo.textContent =
     ideia.titulo;
 
-  titulo.className =
-    "titulo-ideia";
-
-  titulo.onclick = function () {
-
-    abrirIdeia(ideia.id);
-
-  };
-
   cartao.appendChild(titulo);
 
-
-  /* autoria */
 
   var autoria =
     document.createElement("div");
 
-  autoria.className =
-    "autoria";
+  autoria.className = "autoria";
 
 
   var autor =
@@ -340,23 +258,21 @@ function montarCartao(ideia) {
   autor.textContent =
     nomeDe(ideia.autor);
 
-
   autor.onclick = function () {
 
-    abrirPerfil(ideia.autor);
-
+    abrirPessoa(ideia.autor);
   };
 
 
   autoria.appendChild(autor);
 
 
-  autoria.appendChild(
+  var separador =
     document.createTextNode(
       " · " + dataBonita(ideia.data)
-    )
-  );
+    );
 
+  autoria.appendChild(separador);
 
   cartao.appendChild(autoria);
 
@@ -377,35 +293,17 @@ function montarCartao(ideia) {
 
   /* V-06 — estado */
 
-  var estadoDiv =
-    document.createElement("div");
-
-  estadoDiv.className =
-    "estado-ideia";
-
-
-  var estadoTitulo =
-    document.createElement("strong");
-
-  estadoTitulo.textContent =
-    "Estado: ";
-
-  estadoDiv.appendChild(estadoTitulo);
-
-
-  var estadoValor =
+  var estadoIdeia =
     document.createElement("span");
 
-  estadoValor.className =
-    "estado " + ideia.estado;
+  estadoIdeia.className =
+    "estado-ideia estado-" +
+    obterEstado(ideia);
 
-  estadoValor.textContent =
-    estadoBonito(ideia.estado);
+  estadoIdeia.textContent =
+    obterEstado(ideia);
 
-  estadoDiv.appendChild(estadoValor);
-
-
-  cartao.appendChild(estadoDiv);
+  cartao.appendChild(estadoIdeia);
 
 
   /* tags */
@@ -413,14 +311,13 @@ function montarCartao(ideia) {
   var tags =
     document.createElement("div");
 
-  tags.className =
-    "tags";
+  tags.className = "tags";
 
 
   for (var i = 0; i < ideia.tags.length; i++) {
 
     var etiqueta =
-      document.createElement("button");
+      document.createElement("span");
 
     etiqueta.className =
       "etiqueta";
@@ -432,7 +329,6 @@ function montarCartao(ideia) {
       criarCliqueDeTag(ideia.tags[i]);
 
     tags.appendChild(etiqueta);
-
   }
 
 
@@ -470,7 +366,8 @@ function montarCartao(ideia) {
     "apoios";
 
   contador.textContent =
-    ideia.apoios + " apoios";
+    ideia.apoios +
+    " apoios";
 
   rodape.appendChild(contador);
 
@@ -479,15 +376,24 @@ function montarCartao(ideia) {
 
 
   return cartao;
-
 }
 
 
-/* =========================================================
-   V-01 — PERFIL
-   ========================================================= */
+/* ------------------------------------------------ V-06 */
 
-function abrirPerfil(id) {
+function obterEstado(ideia) {
+
+  if (!ideia.estado) {
+    ideia.estado = "semente";
+  }
+
+  return ideia.estado;
+}
+
+
+/* ------------------------------------------------ V-01 */
+
+function abrirPessoa(id) {
 
   var pessoa =
     pessoaPorId(id);
@@ -497,7 +403,7 @@ function abrirPerfil(id) {
   }
 
 
-  estado.perfil = id;
+  estado.pessoaAberta = id;
 
 
   document.getElementById("mural")
@@ -506,30 +412,36 @@ function abrirPerfil(id) {
   document.getElementById("grupos")
     .className = "escondido";
 
-  document.getElementById("perfil")
+  document.getElementById("pessoa")
     .className = "";
 
 
-  var conteudo =
-    document.getElementById("conteudo-perfil");
+  document.getElementById("aba-mural")
+    .className = "aba";
 
-  conteudo.innerHTML = "";
+  document.getElementById("aba-grupos")
+    .className = "aba";
 
 
-  var titulo =
+  desenharPessoa(pessoa);
+}
+
+
+function desenharPessoa(pessoa) {
+
+  var perfil =
+    document.getElementById("perfil-pessoa");
+
+  perfil.innerHTML = "";
+
+
+  var nome =
     document.createElement("h2");
 
-  titulo.textContent =
+  nome.textContent =
     pessoa.nome;
 
-  conteudo.appendChild(titulo);
-
-
-  var informacoes =
-    document.createElement("div");
-
-  informacoes.className =
-    "informacoes-pessoa";
+  perfil.appendChild(nome);
 
 
   var tipo =
@@ -539,7 +451,7 @@ function abrirPerfil(id) {
     "<strong>Tipo:</strong> " +
     pessoa.tipo;
 
-  informacoes.appendChild(tipo);
+  perfil.appendChild(tipo);
 
 
   var curso =
@@ -549,7 +461,7 @@ function abrirPerfil(id) {
     "<strong>Curso:</strong> " +
     pessoa.curso;
 
-  informacoes.appendChild(curso);
+  perfil.appendChild(curso);
 
 
   var interesses =
@@ -559,228 +471,48 @@ function abrirPerfil(id) {
     "<strong>Interesses:</strong> " +
     pessoa.interesses.join(", ");
 
-  informacoes.appendChild(interesses);
+  perfil.appendChild(interesses);
 
 
-  conteudo.appendChild(informacoes);
+  var lista =
+    document.getElementById("ideias-pessoa");
+
+  lista.innerHTML = "";
 
 
-  var tituloIdeias =
-    document.createElement("h3");
-
-  tituloIdeias.textContent =
-    "Ideias publicadas";
-
-  conteudo.appendChild(tituloIdeias);
-
-
-  var ideiasPessoa = [];
+  var encontrou = false;
 
 
   for (var i = 0; i < DADOS.ideias.length; i++) {
 
-    if (DADOS.ideias[i].autor === id) {
+    if (DADOS.ideias[i].autor === pessoa.id) {
 
-      ideiasPessoa.push(
-        DADOS.ideias[i]
+      encontrou = true;
+
+      lista.appendChild(
+        montarCartao(DADOS.ideias[i])
       );
-
     }
-
   }
 
 
-  if (ideiasPessoa.length === 0) {
+  if (!encontrou) {
 
-    var nenhuma =
+    var vazio =
       document.createElement("p");
 
-    nenhuma.className =
-      "sem-ideias";
+    vazio.className =
+      "mensagem";
 
-    nenhuma.textContent =
+    vazio.textContent =
       "ainda não publicou ideias";
 
-    conteudo.appendChild(nenhuma);
-
-  } else {
-
-    var lista =
-      document.createElement("div");
-
-    lista.className =
-      "lista-ideias-pessoa";
-
-
-    for (var j = 0; j < ideiasPessoa.length; j++) {
-
-      var ideiaLink =
-        document.createElement("button");
-
-      ideiaLink.className =
-        "ideia-link";
-
-      ideiaLink.textContent =
-        ideiasPessoa[j].titulo;
-
-      ideiaLink.onclick =
-        criarCliqueDeIdeia(
-          ideiasPessoa[j].id
-        );
-
-      lista.appendChild(ideiaLink);
-
-    }
-
-
-    conteudo.appendChild(lista);
-
+    lista.appendChild(vazio);
   }
-
 }
 
 
-/* =========================================================
-   V-01 — PÁGINA DA IDEIA
-   ========================================================= */
-
-function abrirIdeia(id) {
-
-  var ideia =
-    ideiaPorId(id);
-
-  if (!ideia) {
-    return;
-  }
-
-
-  var pessoa =
-    pessoaPorId(ideia.autor);
-
-
-  estado.perfil = null;
-
-
-  document.getElementById("mural")
-    .className = "escondido";
-
-  document.getElementById("grupos")
-    .className = "escondido";
-
-  document.getElementById("perfil")
-    .className = "";
-
-
-  var conteudo =
-    document.getElementById("conteudo-perfil");
-
-  conteudo.innerHTML = "";
-
-
-  var titulo =
-    document.createElement("h2");
-
-  titulo.textContent =
-    ideia.titulo;
-
-  conteudo.appendChild(titulo);
-
-
-  var resumo =
-    document.createElement("p");
-
-  resumo.className =
-    "resumo";
-
-  resumo.textContent =
-    ideia.resumo;
-
-  conteudo.appendChild(resumo);
-
-
-  var autor =
-    document.createElement("p");
-
-  autor.innerHTML =
-    "<strong>Publicado por:</strong> ";
-
-  var autorLink =
-    document.createElement("button");
-
-  autorLink.className =
-    "link-pessoa";
-
-  autorLink.textContent =
-    pessoa ? pessoa.nome : "(desconhecido)";
-
-  autorLink.onclick = function () {
-
-    abrirPerfil(ideia.autor);
-
-  };
-
-  autor.appendChild(autorLink);
-
-  conteudo.appendChild(autor);
-
-
-  var data =
-    document.createElement("p");
-
-  data.innerHTML =
-    "<strong>Data:</strong> " +
-    dataBonita(ideia.data);
-
-  conteudo.appendChild(data);
-
-
-  var estadoDiv =
-    document.createElement("p");
-
-  estadoDiv.innerHTML =
-    "<strong>Estado:</strong> " +
-    estadoBonito(ideia.estado);
-
-  conteudo.appendChild(estadoDiv);
-
-
-  var tags =
-    document.createElement("p");
-
-  tags.innerHTML =
-    "<strong>Tags:</strong> " +
-    ideia.tags.join(", ");
-
-  conteudo.appendChild(tags);
-
-}
-
-
-/* =========================================================
-   VOLTAR
-   ========================================================= */
-
-function voltarAoMural() {
-
-  estado.perfil = null;
-
-  document.getElementById("perfil")
-    .className = "escondido";
-
-  document.getElementById("grupos")
-    .className = "escondido";
-
-  document.getElementById("mural")
-    .className = "";
-
-  trocarAba("mural");
-
-}
-
-
-/* =========================================================
-   GRUPOS
-   ========================================================= */
+/* ------------------------------------------------ grupos */
 
 function desenharGrupos() {
 
@@ -805,7 +537,8 @@ function desenharGrupos() {
       "quantos";
 
     quantos.textContent =
-      g.membros.length + " membros";
+      g.membros.length +
+      " membros";
 
     item.appendChild(quantos);
 
@@ -835,15 +568,11 @@ function desenharGrupos() {
 
 
     alvo.appendChild(item);
-
   }
-
 }
 
 
-/* =========================================================
-   AÇÕES
-   ========================================================= */
+/* ------------------------------------------------ ações */
 
 function criarCliqueDeTag(tag) {
 
@@ -852,9 +581,7 @@ function criarCliqueDeTag(tag) {
     estado.tag = tag;
 
     desenhar();
-
   };
-
 }
 
 
@@ -875,32 +602,19 @@ function criarCliqueDeApoio(idIdeia) {
 
 
     desenharMural();
-
   };
-
 }
 
 
-function criarCliqueDeIdeia(idIdeia) {
-
-  return function () {
-
-    abrirIdeia(idIdeia);
-
-  };
-
-}
-
-
-/* =========================================================
-   ABAS
-   ========================================================= */
+/* ------------------------------------------------ abas */
 
 function trocarAba(qual) {
 
   estado.aba = qual;
 
-  estado.perfil = null;
+
+  document.getElementById("pessoa")
+    .className = "escondido";
 
 
   document.getElementById("mural")
@@ -917,10 +631,6 @@ function trocarAba(qual) {
       : "escondido";
 
 
-  document.getElementById("perfil")
-    .className = "escondido";
-
-
   document.getElementById("aba-mural")
     .className =
     (qual === "mural")
@@ -933,13 +643,10 @@ function trocarAba(qual) {
     (qual === "grupos")
       ? "aba ativa"
       : "aba";
-
 }
 
 
-/* =========================================================
-   INÍCIO
-   ========================================================= */
+/* ------------------------------------------------ início */
 
 function iniciar() {
 
@@ -947,52 +654,46 @@ function iniciar() {
     DADOS.pessoas[0].id;
 
 
-  document.getElementById("busca").oninput =
-    function (e) {
+  document.getElementById("busca")
+    .oninput = function (e) {
 
       estado.busca =
         e.target.value;
 
       desenharMural();
-
     };
 
 
-  document.getElementById("quem").onchange =
-    function (e) {
+  document.getElementById("quem")
+    .onchange = function (e) {
 
       estado.pessoa =
         Number(e.target.value);
-
     };
 
 
-  document.getElementById("aba-mural").onclick =
-    function () {
+  document.getElementById("aba-mural")
+    .onclick = function () {
 
       trocarAba("mural");
-
     };
 
 
-  document.getElementById("aba-grupos").onclick =
-    function () {
+  document.getElementById("aba-grupos")
+    .onclick = function () {
 
       trocarAba("grupos");
-
     };
 
 
-  document.getElementById("voltar-mural").onclick =
-    function () {
+  document.getElementById("voltar-mural")
+    .onclick = function () {
 
-      voltarAoMural();
-
+      trocarAba("mural");
     };
 
 
   desenhar();
-
 }
 
 
