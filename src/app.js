@@ -49,11 +49,12 @@ function nomeDe(id) {
   }
 
   return pessoa.nome;
+
 }
 
 
 /* ==============================
-   LOCAL STORAGE — ARQUIVO
+   ARQUIVO
 ============================== */
 
 function lerArquivadas() {
@@ -86,7 +87,9 @@ function salvarArquivadas(lista) {
 
 function ideiaArquivada(id) {
 
-  return lerArquivadas().indexOf(Number(id)) !== -1;
+  return (
+    lerArquivadas().indexOf(Number(id)) !== -1
+  );
 
 }
 
@@ -209,7 +212,8 @@ function atualizarContadorNotificacoes() {
     return;
   }
 
-  var atual = Number(estado.pessoa);
+  var atual =
+    Number(estado.pessoa);
 
   var quantidade =
     lerNotificacoes().filter(
@@ -223,28 +227,34 @@ function atualizarContadorNotificacoes() {
       }
     ).length;
 
-  contador.textContent = quantidade;
+  contador.textContent =
+    quantidade;
 
 }
 
 
 function marcarTodasComoLidas() {
 
-  var atual = Number(estado.pessoa);
+  var atual =
+    Number(estado.pessoa);
 
-  var lista = lerNotificacoes();
+  var lista =
+    lerNotificacoes();
 
-  lista.forEach(function (notificacao) {
+  lista.forEach(
+    function (notificacao) {
 
-    if (
-      Number(notificacao.autor) === atual
-    ) {
+      if (
+        Number(notificacao.autor) ===
+        atual
+      ) {
 
-      notificacao.lida = true;
+        notificacao.lida = true;
+
+      }
 
     }
-
-  });
+  );
 
   salvarNotificacoes(lista);
 
@@ -257,19 +267,23 @@ function marcarTodasComoLidas() {
 
 function marcarNotificacaoComoLida(id) {
 
-  var lista = lerNotificacoes();
+  var lista =
+    lerNotificacoes();
 
-  lista.forEach(function (notificacao) {
+  lista.forEach(
+    function (notificacao) {
 
-    if (
-      Number(notificacao.id) === Number(id)
-    ) {
+      if (
+        Number(notificacao.id) ===
+        Number(id)
+      ) {
 
-      notificacao.lida = true;
+        notificacao.lida = true;
+
+      }
 
     }
-
-  });
+  );
 
   salvarNotificacoes(lista);
 
@@ -296,73 +310,83 @@ function ideiasVisiveis() {
 
   return DADOS.ideias
 
-    .filter(function (ideia) {
+    .filter(
+      function (ideia) {
 
-      return (
-        arquivadas.indexOf(
-          Number(ideia.id)
-        ) === -1
-      );
+        return (
+          arquivadas.indexOf(
+            Number(ideia.id)
+          ) === -1
+        );
 
-    })
-
-    .filter(function (ideia) {
-
-      if (!texto) {
-        return true;
       }
+    )
 
-      var conteudo = [
+    .filter(
+      function (ideia) {
 
-        ideia.titulo,
-
-        ideia.resumo,
-
-        (ideia.tags || []).join(" ")
-
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      return (
-        conteudo.indexOf(texto) !== -1
-      );
-
-    })
-
-    .filter(function (ideia) {
-
-      if (!estado.tag) {
-        return true;
-      }
-
-      return (ideia.tags || []).some(
-        function (tag) {
-
-          return (
-            tag.toLowerCase() ===
-            estado.tag.toLowerCase()
-          );
-
+        if (!texto) {
+          return true;
         }
-      );
 
-    })
+        var conteudo = [
 
-    .sort(function (a, b) {
+          ideia.titulo,
 
-      return (
-        Number(b.id) -
-        Number(a.id)
-      );
+          ideia.resumo,
 
-    });
+          (ideia.tags || []).join(" ")
+
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return (
+          conteudo.indexOf(texto) !== -1
+        );
+
+      }
+    )
+
+    .filter(
+      function (ideia) {
+
+        if (!estado.tag) {
+          return true;
+        }
+
+        return (
+          ideia.tags || []
+        ).some(
+          function (tag) {
+
+            return (
+              tag.toLowerCase() ===
+              estado.tag.toLowerCase()
+            );
+
+          }
+        );
+
+      }
+    )
+
+    .sort(
+      function (a, b) {
+
+        return (
+          Number(b.id) -
+          Number(a.id)
+        );
+
+      }
+    );
 
 }
 
 
 /* ==============================
-   CARD DA IDEIA
+   CARD
 ============================== */
 
 function montarCartao(ideia) {
@@ -370,10 +394,11 @@ function montarCartao(ideia) {
   var card =
     document.createElement("article");
 
-  card.className = "cartao";
+  card.className =
+    "cartao";
 
 
-  /* TÍTULO */
+  /* título */
 
   var titulo =
     document.createElement("h3");
@@ -381,7 +406,8 @@ function montarCartao(ideia) {
   var botaoTitulo =
     document.createElement("button");
 
-  botaoTitulo.type = "button";
+  botaoTitulo.type =
+    "button";
 
   botaoTitulo.textContent =
     ideia.titulo;
@@ -395,28 +421,36 @@ function montarCartao(ideia) {
     }
   );
 
-  titulo.appendChild(botaoTitulo);
+  titulo.appendChild(
+    botaoTitulo
+  );
 
-  card.appendChild(titulo);
+  card.appendChild(
+    titulo
+  );
 
 
-  /* RESUMO */
+  /* resumo */
 
   var resumo =
     document.createElement("p");
 
   resumo.textContent =
-    ideia.resumo || "Sem resumo.";
+    ideia.resumo ||
+    "Sem resumo.";
 
-  card.appendChild(resumo);
+  card.appendChild(
+    resumo
+  );
 
 
-  /* AUTOR */
+  /* autor */
 
   var autor =
     document.createElement("p");
 
-  autor.className = "autor";
+  autor.className =
+    "autor";
 
   autor.textContent =
     nomeDe(ideia.autor);
@@ -425,33 +459,41 @@ function montarCartao(ideia) {
     "click",
     function () {
 
-      abrirPessoa(ideia.autor);
+      abrirPessoa(
+        ideia.autor
+      );
 
     }
   );
 
-  card.appendChild(autor);
+  card.appendChild(
+    autor
+  );
 
 
-  /* DATA */
+  /* data */
 
   var data =
     document.createElement("span");
 
-  data.className = "data";
+  data.className =
+    "data";
 
   data.textContent =
     ideia.data || "";
 
-  card.appendChild(data);
+  card.appendChild(
+    data
+  );
 
 
-  /* TAGS */
+  /* tags */
 
   var tags =
     document.createElement("div");
 
-  tags.className = "tags";
+  tags.className =
+    "tags";
 
 
   (ideia.tags || []).forEach(
@@ -460,9 +502,11 @@ function montarCartao(ideia) {
       var tag =
         document.createElement("button");
 
-      tag.type = "button";
+      tag.type =
+        "button";
 
-      tag.className = "tag";
+      tag.className =
+        "tag";
 
       tag.textContent =
         "#" + nomeTag;
@@ -471,28 +515,34 @@ function montarCartao(ideia) {
         "click",
         function () {
 
-          estado.tag = nomeTag;
+          estado.tag =
+            nomeTag;
 
           desenharMural();
 
         }
       );
 
-      tags.appendChild(tag);
+      tags.appendChild(
+        tag
+      );
 
     }
   );
 
 
-  card.appendChild(tags);
+  card.appendChild(
+    tags
+  );
 
 
-  /* APOIOS */
+  /* apoios */
 
   var apoios =
     document.createElement("div");
 
-  apoios.className = "apoios";
+  apoios.className =
+    "apoios";
 
 
   var quantidade =
@@ -512,16 +562,18 @@ function montarCartao(ideia) {
     Number(estado.pessoa);
 
 
-  /* DEMONSTRAR INTERESSE */
+  /* interesse */
 
   if (
-    Number(ideia.autor) !== atual
+    Number(ideia.autor) !==
+    atual
   ) {
 
     var apoiar =
       document.createElement("button");
 
-    apoiar.type = "button";
+    apoiar.type =
+      "button";
 
     apoiar.className =
       "botao-secundario";
@@ -553,16 +605,18 @@ function montarCartao(ideia) {
   }
 
 
-  /* ARQUIVAR */
+  /* arquivar */
 
   if (
-    Number(ideia.autor) === atual
+    Number(ideia.autor) ===
+    atual
   ) {
 
     var arquivar =
       document.createElement("button");
 
-    arquivar.type = "button";
+    arquivar.type =
+      "button";
 
     arquivar.className =
       "botao-secundario";
@@ -577,7 +631,9 @@ function montarCartao(ideia) {
       function () {
 
         if (
-          ideiaArquivada(ideia.id)
+          ideiaArquivada(
+            ideia.id
+          )
         ) {
 
           desarquivarIdeia(
@@ -602,7 +658,9 @@ function montarCartao(ideia) {
   }
 
 
-  card.appendChild(apoios);
+  card.appendChild(
+    apoios
+  );
 
 
   return card;
@@ -625,7 +683,8 @@ function desenharMural() {
     return;
   }
 
-  area.innerHTML = "";
+  area.innerHTML =
+    "";
 
 
   var ideias =
@@ -669,12 +728,15 @@ function desenharMural() {
         'type="button">limpar</button>';
 
       document
-        .getElementById("limpar-filtro")
+        .getElementById(
+          "limpar-filtro"
+        )
         .addEventListener(
           "click",
           function () {
 
-            estado.tag = null;
+            estado.tag =
+              null;
 
             desenharMural();
 
@@ -683,25 +745,31 @@ function desenharMural() {
 
     } else {
 
-      filtro.textContent = "";
+      filtro.textContent =
+        "";
 
     }
 
   }
 
 
-  if (ideias.length === 0) {
+  if (
+    ideias.length === 0
+  ) {
 
     var vazio =
       document.createElement("div");
 
-    vazio.className = "vazio";
+    vazio.className =
+      "vazio";
 
     vazio.innerHTML =
       "<strong>Nenhuma ideia encontrada</strong>" +
       "Tente mudar a busca ou remover o filtro.";
 
-    area.appendChild(vazio);
+    area.appendChild(
+      vazio
+    );
 
     return;
 
@@ -712,7 +780,9 @@ function desenharMural() {
     function (ideia) {
 
       area.appendChild(
-        montarCartao(ideia)
+        montarCartao(
+          ideia
+        )
       );
 
     }
@@ -753,12 +823,16 @@ function desenharIdeia() {
     );
 
 
-  if (!area || !ideia) {
+  if (
+    !area ||
+    !ideia
+  ) {
     return;
   }
 
 
-  area.innerHTML = "";
+  area.innerHTML =
+    "";
 
 
   var titulo =
@@ -767,7 +841,9 @@ function desenharIdeia() {
   titulo.textContent =
     ideia.titulo;
 
-  area.appendChild(titulo);
+  area.appendChild(
+    titulo
+  );
 
 
   var autor =
@@ -779,7 +855,9 @@ function desenharIdeia() {
     " em " +
     ideia.data;
 
-  area.appendChild(autor);
+  area.appendChild(
+    autor
+  );
 
 
   var resumo =
@@ -792,7 +870,9 @@ function desenharIdeia() {
     ideia.resumo ||
     "Sem resumo.";
 
-  area.appendChild(resumo);
+  area.appendChild(
+    resumo
+  );
 
 
   var tags =
@@ -808,9 +888,11 @@ function desenharIdeia() {
       var tag =
         document.createElement("button");
 
-      tag.type = "button";
+      tag.type =
+        "button";
 
-      tag.className = "tag";
+      tag.className =
+        "tag";
 
       tag.textContent =
         "#" + nomeTag;
@@ -819,7 +901,8 @@ function desenharIdeia() {
         "click",
         function () {
 
-          estado.tag = nomeTag;
+          estado.tag =
+            nomeTag;
 
           estado.pagina =
             "mural";
@@ -834,13 +917,17 @@ function desenharIdeia() {
         }
       );
 
-      tags.appendChild(tag);
+      tags.appendChild(
+        tag
+      );
 
     }
   );
 
 
-  area.appendChild(tags);
+  area.appendChild(
+    tags
+  );
 
 
   var info =
@@ -854,7 +941,9 @@ function desenharIdeia() {
     Number(ideia.apoios || 0) +
     " pessoas demonstraram interesse";
 
-  area.appendChild(info);
+  area.appendChild(
+    info
+  );
 
 
   var atual =
@@ -862,13 +951,15 @@ function desenharIdeia() {
 
 
   if (
-    Number(ideia.autor) !== atual
+    Number(ideia.autor) !==
+    atual
   ) {
 
     var apoiar =
       document.createElement("button");
 
-    apoiar.type = "button";
+    apoiar.type =
+      "button";
 
     apoiar.className =
       "botao-principal";
@@ -903,13 +994,15 @@ function desenharIdeia() {
 
 
   if (
-    Number(ideia.autor) === atual
+    Number(ideia.autor) ===
+    atual
   ) {
 
     var arquivar =
       document.createElement("button");
 
-    arquivar.type = "button";
+    arquivar.type =
+      "button";
 
     arquivar.className =
       "botao-secundario";
@@ -927,7 +1020,9 @@ function desenharIdeia() {
       function () {
 
         if (
-          ideiaArquivada(ideia.id)
+          ideiaArquivada(
+            ideia.id
+          )
         ) {
 
           desarquivarIdeia(
@@ -988,12 +1083,16 @@ function desenharPessoa() {
     );
 
 
-  if (!area || !pessoa) {
+  if (
+    !area ||
+    !pessoa
+  ) {
     return;
   }
 
 
-  area.innerHTML = "";
+  area.innerHTML =
+    "";
 
 
   var titulo =
@@ -1002,7 +1101,9 @@ function desenharPessoa() {
   titulo.textContent =
     pessoa.nome;
 
-  area.appendChild(titulo);
+  area.appendChild(
+    titulo
+  );
 
 
   var tipo =
@@ -1013,7 +1114,9 @@ function desenharPessoa() {
     " • " +
     (pessoa.curso || "");
 
-  area.appendChild(tipo);
+  area.appendChild(
+    tipo
+  );
 
 
   if (
@@ -1045,7 +1148,8 @@ function desenharPessoa() {
         var tag =
           document.createElement("span");
 
-        tag.className = "tag";
+        tag.className =
+          "tag";
 
         tag.textContent =
           "#" + interesse;
@@ -1100,7 +1204,9 @@ function desenharPessoa() {
     );
 
 
-  if (ideias.length === 0) {
+  if (
+    ideias.length === 0
+  ) {
 
     var vazio =
       document.createElement("p");
@@ -1137,7 +1243,8 @@ function desenharPessoa() {
       var botao =
         document.createElement("button");
 
-      botao.type = "button";
+      botao.type =
+        "button";
 
       botao.textContent =
         ideia.titulo;
@@ -1199,7 +1306,8 @@ function desenharGrupos() {
     return;
   }
 
-  lista.innerHTML = "";
+  lista.innerHTML =
+    "";
 
 
   if (
@@ -1207,15 +1315,8 @@ function desenharGrupos() {
     DADOS.grupos.length === 0
   ) {
 
-    var vazio =
-      document.createElement("li");
-
-    vazio.textContent =
-      "Nenhum grupo disponível.";
-
-    lista.appendChild(
-      vazio
-    );
+    lista.innerHTML =
+      "<li>Nenhum grupo disponível.</li>";
 
     return;
 
@@ -1288,7 +1389,8 @@ function desenharArquivo() {
     return;
   }
 
-  area.innerHTML = "";
+  area.innerHTML =
+    "";
 
 
   var atual =
@@ -1310,7 +1412,9 @@ function desenharArquivo() {
     );
 
 
-  if (ideias.length === 0) {
+  if (
+    ideias.length === 0
+  ) {
 
     area.innerHTML =
       "<div class='vazio'>" +
@@ -1327,7 +1431,9 @@ function desenharArquivo() {
     function (ideia) {
 
       var card =
-        montarCartao(ideia);
+        montarCartao(
+          ideia
+        );
 
       card.classList.add(
         "arquivada"
@@ -1358,7 +1464,8 @@ function desenharNotificacoes() {
     return;
   }
 
-  area.innerHTML = "";
+  area.innerHTML =
+    "";
 
 
   var atual =
@@ -1378,7 +1485,9 @@ function desenharNotificacoes() {
     );
 
 
-  if (lista.length === 0) {
+  if (
+    lista.length === 0
+  ) {
 
     area.innerHTML =
       "<div class='vazio'>" +
@@ -1412,7 +1521,9 @@ function desenharNotificacoes() {
         "notificacao";
 
 
-      if (!notificacao.lida) {
+      if (
+        !notificacao.lida
+      ) {
 
         card.classList.add(
           "nao-lida"
@@ -1451,18 +1562,18 @@ function desenharNotificacoes() {
       );
 
 
-      if (!notificacao.lida) {
+      if (
+        !notificacao.lida
+      ) {
 
         var botao =
           document.createElement("button");
 
-        botao.type = "button";
+        botao.type =
+          "button";
 
         botao.className =
           "botao-secundario";
-
-        botao.style.marginTop =
-          "10px";
 
         botao.textContent =
           "Marcar como lida";
@@ -1497,7 +1608,6 @@ function desenharNotificacoes() {
 
 /* ==============================
    PUBLICAR IDEIA
-   USA O FORMULÁRIO DO MURAL
 ============================== */
 
 function publicarIdeia() {
@@ -1526,10 +1636,17 @@ function publicarIdeia() {
     );
 
 
-  erro.textContent = "";
+  /* limpa mensagem */
+
+  erro.textContent =
+    "";
 
 
-  if (!titulo) {
+  /* título obrigatório */
+
+  if (
+    titulo === ""
+  ) {
 
     erro.textContent =
       "Digite um título para a ideia.";
@@ -1539,111 +1656,164 @@ function publicarIdeia() {
   }
 
 
-  var tags = tagsTexto
-    ? tagsTexto
+  /* tags */
+
+  var tags = [];
+
+  if (
+    tagsTexto !== ""
+  ) {
+
+    tags =
+      tagsTexto
         .split(",")
-        .map(function (tag) {
+        .map(
+          function (tag) {
 
-          return tag.trim();
+            return tag.trim();
 
-        })
-        .filter(function (tag) {
+          }
+        )
+        .filter(
+          function (tag) {
 
-          return tag.length > 0;
+            return tag !== "";
 
-        })
-    : [];
+          }
+        );
+
+  }
 
 
   /* remove tags repetidas */
 
-  tags = tags.filter(
-    function (tag, indice) {
+  tags =
+    tags.filter(
+      function (tag, indice) {
 
-      return (
-        tags.indexOf(tag) ===
-        indice
-      );
+        return (
+          tags.indexOf(tag) ===
+          indice
+        );
 
-    }
-  );
+      }
+    );
 
 
-  /* encontra o próximo ID */
+  /* próximo ID */
 
   var maiorId = 0;
 
   DADOS.ideias.forEach(
     function (ideia) {
 
-      maiorId =
-        Math.max(
-          maiorId,
-          Number(ideia.id)
-        );
+      var id =
+        Number(ideia.id);
+
+      if (
+        id > maiorId
+      ) {
+
+        maiorId =
+          id;
+
+      }
 
     }
   );
 
 
+  /* nova ideia */
+
   var novaIdeia = {
 
-    id: maiorId + 1,
+    id:
+      maiorId + 1,
 
-    titulo: titulo,
+    titulo:
+      titulo,
 
-    resumo: resumo,
+    resumo:
+      resumo,
 
-    autor: Number(
-      estado.pessoa
-    ),
+    autor:
+      Number(estado.pessoa),
 
-    tags: tags,
+    tags:
+      tags,
 
     data:
-      new Date().toLocaleDateString(
-        "pt-BR"
-      ),
+      new Date()
+        .toLocaleDateString(
+          "pt-BR"
+        ),
 
-    apoios: 0
+    apoios:
+      0
 
   };
 
+
+  /* adiciona a ideia */
 
   DADOS.ideias.unshift(
     novaIdeia
   );
 
 
-  /* limpa o formulário */
+  /* limpa formulário */
 
-  document.getElementById(
-    "form-ideia"
-  ).reset();
-
-
-  estado.busca = "";
-  estado.tag = null;
+  document
+    .getElementById(
+      "form-ideia"
+    )
+    .reset();
 
 
-  document.getElementById(
-    "busca"
-  ).value = "";
+  /* limpa busca/filtro */
 
+  estado.busca =
+    "";
+
+  estado.tag =
+    null;
+
+
+  document
+    .getElementById(
+      "busca"
+    )
+    .value =
+    "";
+
+
+  /* mostra sucesso */
 
   erro.textContent =
     "Ideia publicada com sucesso!";
 
 
-  desenharMural();
+  /* atualiza tudo */
+
+  desenhar();
 
 
-  /* tira a mensagem depois de um tempo */
+  /* mantém no mural */
+
+  estado.aba =
+    "mural";
+
+  estado.pagina =
+    "mural";
+
+  mostrarPaginaAtual();
+
 
   setTimeout(
     function () {
 
-      erro.textContent = "";
+      erro.textContent =
+        "";
 
     },
     2500
@@ -1681,7 +1851,9 @@ function mostrarPaginaAtual() {
     function (id) {
 
       var elemento =
-        document.getElementById(id);
+        document.getElementById(
+          id
+        );
 
       if (elemento) {
 
@@ -1721,9 +1893,11 @@ function mostrarPaginaAtual() {
 
 function trocarAba(qual) {
 
-  estado.aba = qual;
+  estado.aba =
+    qual;
 
-  estado.pagina = qual;
+  estado.pagina =
+    qual;
 
   mostrarPaginaAtual();
 
@@ -1816,8 +1990,6 @@ function desenhar() {
 
 function iniciar() {
 
-  /* verifica os dados */
-
   if (
     !DADOS.pessoas ||
     DADOS.pessoas.length === 0
@@ -1851,6 +2023,9 @@ function iniciar() {
 
 
   if (seletor) {
+
+    seletor.innerHTML =
+      "";
 
     DADOS.pessoas.forEach(
       function (pessoa) {
@@ -1918,7 +2093,9 @@ function iniciar() {
       "click",
       function () {
 
-        trocarAba("mural");
+        trocarAba(
+          "mural"
+        );
 
       }
     );
@@ -1937,7 +2114,9 @@ function iniciar() {
       "click",
       function () {
 
-        trocarAba("grupos");
+        trocarAba(
+          "grupos"
+        );
 
       }
     );
@@ -1956,7 +2135,9 @@ function iniciar() {
       "click",
       function () {
 
-        trocarAba("arquivo");
+        trocarAba(
+          "arquivo"
+        );
 
       }
     );
@@ -2012,13 +2193,14 @@ function iniciar() {
 
 
   /* ==========================
-     FORMULÁRIO DO MURAL
+     PUBLICAR IDEIA
   ========================== */
 
   var formIdeia =
     document.getElementById(
       "form-ideia"
     );
+
 
   if (formIdeia) {
 
@@ -2037,7 +2219,7 @@ function iniciar() {
 
 
   /* ==========================
-     VOLTAR DA PESSOA
+     VOLTAR PESSOA
   ========================== */
 
   var voltarPessoa =
@@ -2068,7 +2250,7 @@ function iniciar() {
 
 
   /* ==========================
-     VOLTAR DA IDEIA
+     VOLTAR IDEIA
   ========================== */
 
   var voltarIdeia =
@@ -2099,7 +2281,7 @@ function iniciar() {
 
 
   /* ==========================
-     VOLTAR DA PUBLICAÇÃO
+     VOLTAR PUBLICAÇÃO
   ========================== */
 
   var voltarPublicar =
@@ -2153,7 +2335,7 @@ function iniciar() {
 
 
   /* ==========================
-     RODAPÉ
+     BASE
   ========================== */
 
   var base =
@@ -2171,8 +2353,10 @@ function iniciar() {
 
 
   /* ==========================
-     PRIMEIRO DESENHO
+     INICIAR
   ========================== */
+
+  mostrarPaginaAtual();
 
   desenhar();
 
