@@ -31,53 +31,45 @@
   <!-- MURAL -->
   <section id="mural">
 
-    <!-- V-03 — PUBLICAR UMA IDEIA -->
+    <!-- PUBLICAR IDEIA -->
     <div class="publicar">
 
-      <div class="publicar-topo">
-
-        <div>
-          <span class="publicar-legenda">NOVA IDEIA</span>
-          <h2>O que você está pensando?</h2>
-        </div>
-
-        <span class="publicar-broto">✦</span>
-
-      </div>
+      <h2>Publique uma ideia</h2>
 
       <form id="form-ideia">
 
         <input
           id="titulo-ideia"
           type="text"
-          placeholder="Título da ideia..."
+          placeholder="Título da ideia"
           autocomplete="off">
 
         <textarea
           id="resumo-ideia"
-          placeholder="Escreva um pequeno resumo sobre ela..."></textarea>
+          placeholder="Descreva sua ideia..."></textarea>
 
-        <div class="publicar-baixo">
+        <input
+          id="tags-ideia"
+          type="text"
+          placeholder="Tags (ex: tecnologia, educação)"
+          autocomplete="off">
 
-          <input
-            id="tags-ideia"
-            type="text"
-            placeholder="tags: tecnologia, educação..."
-            autocomplete="off">
+        <div class="publicar-footer">
+
+          <p id="erro-ideia"></p>
 
           <button
             type="submit"
             class="publicar-btn">
-            Plantar ideia
+            Publicar
           </button>
 
         </div>
 
-        <p id="erro-ideia" class="erro-ideia"></p>
-
       </form>
 
     </div>
+
 
     <h2>Mural de ideias</h2>
 
