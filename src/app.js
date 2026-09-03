@@ -53,20 +53,22 @@ function nomeDe(id) {
 
 
 /* ==============================
-   LOCAL STORAGE
+   LOCAL STORAGE — ARQUIVO
 ============================== */
 
 function lerArquivadas() {
 
   try {
 
-    var dados = localStorage.getItem("viveiro_arquivadas");
+    var dados =
+      localStorage.getItem("viveiro_arquivadas");
 
     return dados ? JSON.parse(dados) : [];
 
   } catch (erro) {
 
     return [];
+
   }
 
 }
@@ -85,6 +87,7 @@ function salvarArquivadas(lista) {
 function ideiaArquivada(id) {
 
   return lerArquivadas().indexOf(Number(id)) !== -1;
+
 }
 
 
@@ -99,6 +102,7 @@ function arquivarIdeia(id) {
     lista.push(id);
 
     salvarArquivadas(lista);
+
   }
 
   desenhar();
@@ -110,11 +114,12 @@ function desarquivarIdeia(id) {
 
   id = Number(id);
 
-  var lista = lerArquivadas().filter(function (item) {
+  var lista =
+    lerArquivadas().filter(function (item) {
 
-    return Number(item) !== id;
+      return Number(item) !== id;
 
-  });
+    });
 
   salvarArquivadas(lista);
 
@@ -139,6 +144,7 @@ function lerNotificacoes() {
   } catch (erro) {
 
     return [];
+
   }
 
 }
@@ -162,7 +168,10 @@ function criarNotificacao(idIdeia, idInteressado) {
     return;
   }
 
-  if (Number(ideia.autor) === Number(idInteressado)) {
+  if (
+    Number(ideia.autor) ===
+    Number(idInteressado)
+  ) {
     return;
   }
 
@@ -192,7 +201,9 @@ function criarNotificacao(idIdeia, idInteressado) {
 function atualizarContadorNotificacoes() {
 
   var contador =
-    document.getElementById("contador-notificacoes");
+    document.getElementById(
+      "contador-notificacoes"
+    );
 
   if (!contador) {
     return;
@@ -201,14 +212,16 @@ function atualizarContadorNotificacoes() {
   var atual = Number(estado.pessoa);
 
   var quantidade =
-    lerNotificacoes().filter(function (notificacao) {
+    lerNotificacoes().filter(
+      function (notificacao) {
 
-      return (
-        Number(notificacao.autor) === atual &&
-        !notificacao.lida
-      );
+        return (
+          Number(notificacao.autor) === atual &&
+          !notificacao.lida
+        );
 
-    }).length;
+      }
+    ).length;
 
   contador.textContent = quantidade;
 
@@ -223,8 +236,12 @@ function marcarTodasComoLidas() {
 
   lista.forEach(function (notificacao) {
 
-    if (Number(notificacao.autor) === atual) {
+    if (
+      Number(notificacao.autor) === atual
+    ) {
+
       notificacao.lida = true;
+
     }
 
   });
@@ -244,8 +261,12 @@ function marcarNotificacaoComoLida(id) {
 
   lista.forEach(function (notificacao) {
 
-    if (Number(notificacao.id) === Number(id)) {
+    if (
+      Number(notificacao.id) === Number(id)
+    ) {
+
       notificacao.lida = true;
+
     }
 
   });
@@ -270,19 +291,18 @@ function ideiasVisiveis() {
       .trim()
       .toLowerCase();
 
-  var arquivadas = lerArquivadas();
+  var arquivadas =
+    lerArquivadas();
 
   return DADOS.ideias
 
     .filter(function (ideia) {
 
-      if (
-        arquivadas.indexOf(Number(ideia.id)) !== -1
-      ) {
-        return false;
-      }
-
-      return true;
+      return (
+        arquivadas.indexOf(
+          Number(ideia.id)
+        ) === -1
+      );
 
     })
 
@@ -304,7 +324,9 @@ function ideiasVisiveis() {
         .join(" ")
         .toLowerCase();
 
-      return conteudo.indexOf(texto) !== -1;
+      return (
+        conteudo.indexOf(texto) !== -1
+      );
 
     })
 
@@ -314,18 +336,25 @@ function ideiasVisiveis() {
         return true;
       }
 
-      return (ideia.tags || []).some(function (tag) {
+      return (ideia.tags || []).some(
+        function (tag) {
 
-        return tag.toLowerCase() ===
-          estado.tag.toLowerCase();
+          return (
+            tag.toLowerCase() ===
+            estado.tag.toLowerCase()
+          );
 
-      });
+        }
+      );
 
     })
 
     .sort(function (a, b) {
 
-      return Number(b.id) - Number(a.id);
+      return (
+        Number(b.id) -
+        Number(a.id)
+      );
 
     });
 
@@ -338,24 +367,31 @@ function ideiasVisiveis() {
 
 function montarCartao(ideia) {
 
-  var card = document.createElement("article");
+  var card =
+    document.createElement("article");
 
   card.className = "cartao";
 
 
-  var titulo = document.createElement("h3");
+  /* TÍTULO */
+
+  var titulo =
+    document.createElement("h3");
 
   var botaoTitulo =
     document.createElement("button");
 
   botaoTitulo.type = "button";
 
-  botaoTitulo.textContent = ideia.titulo;
+  botaoTitulo.textContent =
+    ideia.titulo;
 
   botaoTitulo.addEventListener(
     "click",
     function () {
+
       abrirIdeia(ideia.id);
+
     }
   );
 
@@ -363,6 +399,8 @@ function montarCartao(ideia) {
 
   card.appendChild(titulo);
 
+
+  /* RESUMO */
 
   var resumo =
     document.createElement("p");
@@ -372,6 +410,8 @@ function montarCartao(ideia) {
 
   card.appendChild(resumo);
 
+
+  /* AUTOR */
 
   var autor =
     document.createElement("p");
@@ -384,12 +424,16 @@ function montarCartao(ideia) {
   autor.addEventListener(
     "click",
     function () {
+
       abrirPessoa(ideia.autor);
+
     }
   );
 
   card.appendChild(autor);
 
+
+  /* DATA */
 
   var data =
     document.createElement("span");
@@ -402,42 +446,48 @@ function montarCartao(ideia) {
   card.appendChild(data);
 
 
+  /* TAGS */
+
   var tags =
     document.createElement("div");
 
   tags.className = "tags";
 
 
-  (ideia.tags || []).forEach(function (nomeTag) {
+  (ideia.tags || []).forEach(
+    function (nomeTag) {
 
-    var tag =
-      document.createElement("button");
+      var tag =
+        document.createElement("button");
 
-    tag.type = "button";
+      tag.type = "button";
 
-    tag.className = "tag";
+      tag.className = "tag";
 
-    tag.textContent =
-      "#" + nomeTag;
+      tag.textContent =
+        "#" + nomeTag;
 
-    tag.addEventListener(
-      "click",
-      function () {
+      tag.addEventListener(
+        "click",
+        function () {
 
-        estado.tag = nomeTag;
+          estado.tag = nomeTag;
 
-        desenharMural();
+          desenharMural();
 
-      }
-    );
+        }
+      );
 
-    tags.appendChild(tag);
+      tags.appendChild(tag);
 
-  });
+    }
+  );
 
 
   card.appendChild(tags);
 
+
+  /* APOIOS */
 
   var apoios =
     document.createElement("div");
@@ -449,23 +499,32 @@ function montarCartao(ideia) {
     document.createElement("span");
 
   quantidade.textContent =
-    "♡ " + Number(ideia.apoios || 0) + " apoios";
+    "♡ " +
+    Number(ideia.apoios || 0) +
+    " apoios";
 
-  apoios.appendChild(quantidade);
+  apoios.appendChild(
+    quantidade
+  );
 
 
   var atual =
     Number(estado.pessoa);
 
 
-  if (Number(ideia.autor) !== atual) {
+  /* DEMONSTRAR INTERESSE */
+
+  if (
+    Number(ideia.autor) !== atual
+  ) {
 
     var apoiar =
       document.createElement("button");
 
     apoiar.type = "button";
 
-    apoiar.className = "botao-secundario";
+    apoiar.className =
+      "botao-secundario";
 
     apoiar.textContent =
       "Demonstrar interesse";
@@ -487,19 +546,26 @@ function montarCartao(ideia) {
       }
     );
 
-    apoios.appendChild(apoiar);
+    apoios.appendChild(
+      apoiar
+    );
 
   }
 
 
-  if (Number(ideia.autor) === atual) {
+  /* ARQUIVAR */
+
+  if (
+    Number(ideia.autor) === atual
+  ) {
 
     var arquivar =
       document.createElement("button");
 
     arquivar.type = "button";
 
-    arquivar.className = "botao-secundario";
+    arquivar.className =
+      "botao-secundario";
 
     arquivar.textContent =
       ideiaArquivada(ideia.id)
@@ -510,20 +576,28 @@ function montarCartao(ideia) {
       "click",
       function () {
 
-        if (ideiaArquivada(ideia.id)) {
+        if (
+          ideiaArquivada(ideia.id)
+        ) {
 
-          desarquivarIdeia(ideia.id);
+          desarquivarIdeia(
+            ideia.id
+          );
 
         } else {
 
-          arquivarIdeia(ideia.id);
+          arquivarIdeia(
+            ideia.id
+          );
 
         }
 
       }
     );
 
-    apoios.appendChild(arquivar);
+    apoios.appendChild(
+      arquivar
+    );
 
   }
 
@@ -537,13 +611,15 @@ function montarCartao(ideia) {
 
 
 /* ==============================
-   DESENHAR MURAL
+   MURAL
 ============================== */
 
 function desenharMural() {
 
   var area =
-    document.getElementById("cartoes");
+    document.getElementById(
+      "cartoes"
+    );
 
   if (!area) {
     return;
@@ -557,26 +633,59 @@ function desenharMural() {
 
 
   var contagem =
-    document.getElementById("contagem");
+    document.getElementById(
+      "contagem"
+    );
 
-  contagem.textContent =
-    ideias.length +
-    (ideias.length === 1
-      ? " ideia"
-      : " ideias");
+  if (contagem) {
+
+    contagem.textContent =
+      ideias.length +
+      (
+        ideias.length === 1
+          ? " ideia"
+          : " ideias"
+      );
+
+  }
 
 
   var filtro =
-    document.getElementById("filtro-ativo");
+    document.getElementById(
+      "filtro-ativo"
+    );
 
-  if (estado.tag) {
 
-    filtro.textContent =
-      "Filtro ativo: #" + estado.tag;
+  if (filtro) {
 
-  } else {
+    if (estado.tag) {
 
-    filtro.textContent = "";
+      filtro.innerHTML =
+        'Filtro ativo: <strong>#' +
+        estado.tag +
+        '</strong> ' +
+        '<button id="limpar-filtro" ' +
+        'class="botao-secundario" ' +
+        'type="button">limpar</button>';
+
+      document
+        .getElementById("limpar-filtro")
+        .addEventListener(
+          "click",
+          function () {
+
+            estado.tag = null;
+
+            desenharMural();
+
+          }
+        );
+
+    } else {
+
+      filtro.textContent = "";
+
+    }
 
   }
 
@@ -595,16 +704,19 @@ function desenharMural() {
     area.appendChild(vazio);
 
     return;
+
   }
 
 
-  ideias.forEach(function (ideia) {
+  ideias.forEach(
+    function (ideia) {
 
-    area.appendChild(
-      montarCartao(ideia)
-    );
+      area.appendChild(
+        montarCartao(ideia)
+      );
 
-  });
+    }
+  );
 
 }
 
@@ -631,10 +743,14 @@ function abrirIdeia(id) {
 function desenharIdeia() {
 
   var area =
-    document.getElementById("conteudo-ideia");
+    document.getElementById(
+      "conteudo-ideia"
+    );
 
   var ideia =
-    ideiaPorId(estado.ideiaAberta);
+    ideiaPorId(
+      estado.ideiaAberta
+    );
 
 
   if (!area || !ideia) {
@@ -669,10 +785,12 @@ function desenharIdeia() {
   var resumo =
     document.createElement("p");
 
-  resumo.className = "resumo";
+  resumo.className =
+    "resumo";
 
   resumo.textContent =
-    ideia.resumo || "Sem resumo.";
+    ideia.resumo ||
+    "Sem resumo.";
 
   area.appendChild(resumo);
 
@@ -680,41 +798,46 @@ function desenharIdeia() {
   var tags =
     document.createElement("div");
 
-  tags.className = "tags";
+  tags.className =
+    "tags";
 
 
-  (ideia.tags || []).forEach(function (nomeTag) {
+  (ideia.tags || []).forEach(
+    function (nomeTag) {
 
-    var tag =
-      document.createElement("button");
+      var tag =
+        document.createElement("button");
 
-    tag.type = "button";
+      tag.type = "button";
 
-    tag.className = "tag";
+      tag.className = "tag";
 
-    tag.textContent =
-      "#" + nomeTag;
+      tag.textContent =
+        "#" + nomeTag;
 
-    tag.addEventListener(
-      "click",
-      function () {
+      tag.addEventListener(
+        "click",
+        function () {
 
-        estado.tag = nomeTag;
+          estado.tag = nomeTag;
 
-        estado.pagina = "mural";
+          estado.pagina =
+            "mural";
 
-        estado.aba = "mural";
+          estado.aba =
+            "mural";
 
-        mostrarPaginaAtual();
+          mostrarPaginaAtual();
 
-        desenharMural();
+          desenharMural();
 
-      }
-    );
+        }
+      );
 
-    tags.appendChild(tag);
+      tags.appendChild(tag);
 
-  });
+    }
+  );
 
 
   area.appendChild(tags);
@@ -723,7 +846,8 @@ function desenharIdeia() {
   var info =
     document.createElement("div");
 
-  info.className = "apoios";
+  info.className =
+    "apoios";
 
   info.textContent =
     "♡ " +
@@ -737,14 +861,17 @@ function desenharIdeia() {
     Number(estado.pessoa);
 
 
-  if (Number(ideia.autor) !== atual) {
+  if (
+    Number(ideia.autor) !== atual
+  ) {
 
     var apoiar =
       document.createElement("button");
 
     apoiar.type = "button";
 
-    apoiar.className = "botao-principal";
+    apoiar.className =
+      "botao-principal";
 
     apoiar.textContent =
       "Demonstrar interesse";
@@ -768,21 +895,27 @@ function desenharIdeia() {
       }
     );
 
-    area.appendChild(apoiar);
+    area.appendChild(
+      apoiar
+    );
 
   }
 
 
-  if (Number(ideia.autor) === atual) {
+  if (
+    Number(ideia.autor) === atual
+  ) {
 
     var arquivar =
       document.createElement("button");
 
     arquivar.type = "button";
 
-    arquivar.className = "botao-secundario";
+    arquivar.className =
+      "botao-secundario";
 
-    arquivar.style.marginLeft = "8px";
+    arquivar.style.marginLeft =
+      "8px";
 
     arquivar.textContent =
       ideiaArquivada(ideia.id)
@@ -793,13 +926,19 @@ function desenharIdeia() {
       "click",
       function () {
 
-        if (ideiaArquivada(ideia.id)) {
+        if (
+          ideiaArquivada(ideia.id)
+        ) {
 
-          desarquivarIdeia(ideia.id);
+          desarquivarIdeia(
+            ideia.id
+          );
 
         } else {
 
-          arquivarIdeia(ideia.id);
+          arquivarIdeia(
+            ideia.id
+          );
 
         }
 
@@ -808,7 +947,9 @@ function desenharIdeia() {
       }
     );
 
-    area.appendChild(arquivar);
+    area.appendChild(
+      arquivar
+    );
 
   }
 
@@ -837,10 +978,14 @@ function abrirPessoa(id) {
 function desenharPessoa() {
 
   var area =
-    document.getElementById("conteudo-pessoa");
+    document.getElementById(
+      "conteudo-pessoa"
+    );
 
   var pessoa =
-    pessoaPorId(estado.pessoaAberta);
+    pessoaPorId(
+      estado.pessoaAberta
+    );
 
 
   if (!area || !pessoa) {
@@ -905,13 +1050,17 @@ function desenharPessoa() {
         tag.textContent =
           "#" + interesse;
 
-        interesses.appendChild(tag);
+        interesses.appendChild(
+          tag
+        );
 
       }
     );
 
 
-    area.appendChild(interesses);
+    area.appendChild(
+      interesses
+    );
 
   }
 
@@ -959,7 +1108,9 @@ function desenharPessoa() {
     vazio.textContent =
       "Esta pessoa ainda não publicou ideias.";
 
-    area.appendChild(vazio);
+    area.appendChild(
+      vazio
+    );
 
     return;
 
@@ -972,12 +1123,16 @@ function desenharPessoa() {
       var mini =
         document.createElement("div");
 
-      mini.className = "cartao";
+      mini.className =
+        "cartao";
 
-      mini.style.marginTop = "12px";
+      mini.style.marginTop =
+        "12px";
+
 
       var titulo =
         document.createElement("h3");
+
 
       var botao =
         document.createElement("button");
@@ -990,13 +1145,23 @@ function desenharPessoa() {
       botao.addEventListener(
         "click",
         function () {
-          abrirIdeia(ideia.id);
+
+          abrirIdeia(
+            ideia.id
+          );
+
         }
       );
 
-      titulo.appendChild(botao);
 
-      mini.appendChild(titulo);
+      titulo.appendChild(
+        botao
+      );
+
+      mini.appendChild(
+        titulo
+      );
+
 
       var resumo =
         document.createElement("p");
@@ -1004,9 +1169,14 @@ function desenharPessoa() {
       resumo.textContent =
         ideia.resumo;
 
-      mini.appendChild(resumo);
+      mini.appendChild(
+        resumo
+      );
 
-      area.appendChild(mini);
+
+      area.appendChild(
+        mini
+      );
 
     }
   );
@@ -1037,8 +1207,15 @@ function desenharGrupos() {
     DADOS.grupos.length === 0
   ) {
 
-    lista.innerHTML =
-      "<li>Nenhum grupo disponível.</li>";
+    var vazio =
+      document.createElement("li");
+
+    vazio.textContent =
+      "Nenhum grupo disponível.";
+
+    lista.appendChild(
+      vazio
+    );
 
     return;
 
@@ -1058,7 +1235,9 @@ function desenharGrupos() {
       titulo.textContent =
         grupo.nome;
 
-      item.appendChild(titulo);
+      item.appendChild(
+        titulo
+      );
 
 
       var descricao =
@@ -1067,7 +1246,9 @@ function desenharGrupos() {
       descricao.textContent =
         grupo.descricao || "";
 
-      item.appendChild(descricao);
+      item.appendChild(
+        descricao
+      );
 
 
       var membros =
@@ -1077,10 +1258,14 @@ function desenharGrupos() {
         (grupo.membros || []).length +
         " membros";
 
-      item.appendChild(membros);
+      item.appendChild(
+        membros
+      );
 
 
-      lista.appendChild(item);
+      lista.appendChild(
+        item
+      );
 
     }
   );
@@ -1116,7 +1301,9 @@ function desenharArquivo() {
 
         return (
           Number(ideia.autor) === atual &&
-          ideiaArquivada(ideia.id)
+          ideiaArquivada(
+            ideia.id
+          )
         );
 
       }
@@ -1146,7 +1333,9 @@ function desenharArquivo() {
         "arquivada"
       );
 
-      area.appendChild(card);
+      area.appendChild(
+        card
+      );
 
     }
   );
@@ -1224,9 +1413,11 @@ function desenharNotificacoes() {
 
 
       if (!notificacao.lida) {
+
         card.classList.add(
           "nao-lida"
         );
+
       }
 
 
@@ -1242,7 +1433,9 @@ function desenharNotificacoes() {
         ideia.titulo +
         "</strong>.";
 
-      card.appendChild(texto);
+      card.appendChild(
+        texto
+      );
 
 
       var data =
@@ -1253,7 +1446,9 @@ function desenharNotificacoes() {
           ? "Notificação lida"
           : "Nova notificação";
 
-      card.appendChild(data);
+      card.appendChild(
+        data
+      );
 
 
       if (!notificacao.lida) {
@@ -1283,12 +1478,16 @@ function desenharNotificacoes() {
           }
         );
 
-        card.appendChild(botao);
+        card.appendChild(
+          botao
+        );
 
       }
 
 
-      area.appendChild(card);
+      area.appendChild(
+        card
+      );
 
     }
   );
@@ -1297,39 +1496,33 @@ function desenharNotificacoes() {
 
 
 /* ==============================
-   PUBLICAÇÃO
+   PUBLICAR IDEIA
+   USA O FORMULÁRIO DO MURAL
 ============================== */
-
-function abrirPublicacao() {
-
-  estado.pagina =
-    "pagina-publicar";
-
-  mostrarPaginaAtual();
-
-}
-
 
 function publicarIdeia() {
 
   var titulo =
     document.getElementById(
-      "novo-titulo"
+      "titulo-ideia"
     ).value.trim();
+
 
   var resumo =
     document.getElementById(
-      "novo-resumo"
+      "resumo-ideia"
     ).value.trim();
+
 
   var tagsTexto =
     document.getElementById(
-      "novas-tags"
+      "tags-ideia"
     ).value.trim();
+
 
   var erro =
     document.getElementById(
-      "erro-publicacao"
+      "erro-ideia"
     );
 
 
@@ -1350,22 +1543,33 @@ function publicarIdeia() {
     ? tagsTexto
         .split(",")
         .map(function (tag) {
+
           return tag.trim();
+
         })
         .filter(function (tag) {
+
           return tag.length > 0;
+
         })
     : [];
 
 
+  /* remove tags repetidas */
+
   tags = tags.filter(
     function (tag, indice) {
 
-      return tags.indexOf(tag) === indice;
+      return (
+        tags.indexOf(tag) ===
+        indice
+      );
 
     }
   );
 
+
+  /* encontra o próximo ID */
 
   var maiorId = 0;
 
@@ -1390,7 +1594,9 @@ function publicarIdeia() {
 
     resumo: resumo,
 
-    autor: Number(estado.pessoa),
+    autor: Number(
+      estado.pessoa
+    ),
 
     tags: tags,
 
@@ -1409,25 +1615,39 @@ function publicarIdeia() {
   );
 
 
+  /* limpa o formulário */
+
   document.getElementById(
-    "form-publicar"
+    "form-ideia"
   ).reset();
 
 
   estado.busca = "";
   estado.tag = null;
 
+
   document.getElementById(
     "busca"
   ).value = "";
 
 
-  estado.aba = "mural";
-  estado.pagina = "mural";
+  erro.textContent =
+    "Ideia publicada com sucesso!";
 
-  mostrarPaginaAtual();
 
   desenharMural();
+
+
+  /* tira a mensagem depois de um tempo */
+
+  setTimeout(
+    function () {
+
+      erro.textContent = "";
+
+    },
+    2500
+  );
 
 }
 
@@ -1495,6 +1715,10 @@ function mostrarPaginaAtual() {
 }
 
 
+/* ==============================
+   TROCAR ABA
+============================== */
+
 function trocarAba(qual) {
 
   estado.aba = qual;
@@ -1505,9 +1729,12 @@ function trocarAba(qual) {
 
   desenhar();
 
-
 }
 
+
+/* ==============================
+   ABAS
+============================== */
 
 function atualizarAbas() {
 
@@ -1550,7 +1777,8 @@ function atualizarAbas() {
 
       botao.classList.toggle(
         "ativa",
-        estado.aba === item.pagina
+        estado.aba ===
+        item.pagina
       );
 
     }
@@ -1588,13 +1816,23 @@ function desenhar() {
 
 function iniciar() {
 
+  /* verifica os dados */
+
   if (
     !DADOS.pessoas ||
     DADOS.pessoas.length === 0
   ) {
+
+    console.error(
+      "Nenhuma pessoa encontrada em DADOS."
+    );
+
     return;
+
   }
 
+
+  /* pessoa inicial */
 
   estado.pessoa =
     Number(
@@ -1602,208 +1840,347 @@ function iniciar() {
     );
 
 
+  /* ==========================
+     NAVEGANDO COMO
+  ========================== */
+
   var seletor =
     document.getElementById(
       "quem"
     );
 
 
-  DADOS.pessoas.forEach(
-    function (pessoa) {
+  if (seletor) {
 
-      var option =
-        document.createElement(
-          "option"
+    DADOS.pessoas.forEach(
+      function (pessoa) {
+
+        var option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          pessoa.id;
+
+        option.textContent =
+          pessoa.nome;
+
+        seletor.appendChild(
+          option
         );
 
-      option.value =
-        pessoa.id;
-
-      option.textContent =
-        pessoa.nome;
-
-      seletor.appendChild(
-        option
-      );
-
-    }
-  );
+      }
+    );
 
 
-  seletor.value =
-    estado.pessoa;
+    seletor.value =
+      estado.pessoa;
 
 
-  seletor.addEventListener(
-    "change",
-    function () {
+    seletor.addEventListener(
+      "change",
+      function () {
 
-      estado.pessoa =
-        Number(this.value);
+        estado.pessoa =
+          Number(
+            this.value
+          );
 
-      estado.aba = "mural";
+        estado.aba =
+          "mural";
 
-      estado.pagina = "mural";
+        estado.pagina =
+          "mural";
 
-      mostrarPaginaAtual();
+        mostrarPaginaAtual();
 
-      desenhar();
+        desenhar();
 
-    }
-  );
+      }
+    );
 
-
-  document.getElementById(
-    "aba-mural"
-  ).addEventListener(
-    "click",
-    function () {
-      trocarAba("mural");
-    }
-  );
+  }
 
 
-  document.getElementById(
-    "aba-grupos"
-  ).addEventListener(
-    "click",
-    function () {
-      trocarAba("grupos");
-    }
-  );
+  /* ==========================
+     ABAS
+  ========================== */
+
+  var abaMural =
+    document.getElementById(
+      "aba-mural"
+    );
+
+  if (abaMural) {
+
+    abaMural.addEventListener(
+      "click",
+      function () {
+
+        trocarAba("mural");
+
+      }
+    );
+
+  }
 
 
-  document.getElementById(
-    "aba-arquivo"
-  ).addEventListener(
-    "click",
-    function () {
-      trocarAba("arquivo");
-    }
-  );
+  var abaGrupos =
+    document.getElementById(
+      "aba-grupos"
+    );
+
+  if (abaGrupos) {
+
+    abaGrupos.addEventListener(
+      "click",
+      function () {
+
+        trocarAba("grupos");
+
+      }
+    );
+
+  }
 
 
-  document.getElementById(
-    "aba-notificacoes"
-  ).addEventListener(
-    "click",
-    function () {
-      trocarAba("notificacoes");
-    }
-  );
+  var abaArquivo =
+    document.getElementById(
+      "aba-arquivo"
+    );
+
+  if (abaArquivo) {
+
+    abaArquivo.addEventListener(
+      "click",
+      function () {
+
+        trocarAba("arquivo");
+
+      }
+    );
+
+  }
 
 
-  document.getElementById(
-    "busca"
-  ).addEventListener(
-    "input",
-    function () {
+  var abaNotificacoes =
+    document.getElementById(
+      "aba-notificacoes"
+    );
 
-      estado.busca =
-        this.value;
+  if (abaNotificacoes) {
 
-      desenharMural();
+    abaNotificacoes.addEventListener(
+      "click",
+      function () {
 
-    }
-  );
+        trocarAba(
+          "notificacoes"
+        );
 
+      }
+    );
 
-  document.getElementById(
-    "botao-publicar"
-  ).addEventListener(
-    "click",
-    function () {
-      abrirPublicacao();
-    }
-  );
+  }
 
 
-  document.getElementById(
-    "form-publicar"
-  ).addEventListener(
-    "submit",
-    function (evento) {
+  /* ==========================
+     BUSCA
+  ========================== */
 
-      evento.preventDefault();
+  var busca =
+    document.getElementById(
+      "busca"
+    );
 
-      publicarIdeia();
+  if (busca) {
 
-    }
-  );
+    busca.addEventListener(
+      "input",
+      function () {
 
+        estado.busca =
+          this.value;
 
-  document.getElementById(
-    "voltar-pessoa"
-  ).addEventListener(
-    "click",
-    function () {
+        desenharMural();
 
-      estado.pagina = "mural";
-      estado.aba = "mural";
+      }
+    );
 
-      mostrarPaginaAtual();
-
-      desenharMural();
-
-    }
-  );
+  }
 
 
-  document.getElementById(
-    "voltar-ideia"
-  ).addEventListener(
-    "click",
-    function () {
+  /* ==========================
+     FORMULÁRIO DO MURAL
+  ========================== */
 
-      estado.pagina = "mural";
-      estado.aba = "mural";
+  var formIdeia =
+    document.getElementById(
+      "form-ideia"
+    );
 
-      mostrarPaginaAtual();
+  if (formIdeia) {
 
-      desenharMural();
+    formIdeia.addEventListener(
+      "submit",
+      function (evento) {
 
-    }
-  );
+        evento.preventDefault();
 
+        publicarIdeia();
 
-  document.getElementById(
-    "voltar-publicar"
-  ).addEventListener(
-    "click",
-    function () {
+      }
+    );
 
-      estado.pagina = "mural";
-      estado.aba = "mural";
-
-      mostrarPaginaAtual();
-
-      desenharMural();
-
-    }
-  );
+  }
 
 
-  document.getElementById(
-    "marcar-notificacoes"
-  ).addEventListener(
-    "click",
-    function () {
+  /* ==========================
+     VOLTAR DA PESSOA
+  ========================== */
 
-      marcarTodasComoLidas();
+  var voltarPessoa =
+    document.getElementById(
+      "voltar-pessoa"
+    );
 
-    }
-  );
+  if (voltarPessoa) {
+
+    voltarPessoa.addEventListener(
+      "click",
+      function () {
+
+        estado.pagina =
+          "mural";
+
+        estado.aba =
+          "mural";
+
+        mostrarPaginaAtual();
+
+        desenharMural();
+
+      }
+    );
+
+  }
 
 
-  document.getElementById(
-    "base"
-  ).textContent =
-    "base: " + DADOS.codigo;
+  /* ==========================
+     VOLTAR DA IDEIA
+  ========================== */
 
+  var voltarIdeia =
+    document.getElementById(
+      "voltar-ideia"
+    );
+
+  if (voltarIdeia) {
+
+    voltarIdeia.addEventListener(
+      "click",
+      function () {
+
+        estado.pagina =
+          "mural";
+
+        estado.aba =
+          "mural";
+
+        mostrarPaginaAtual();
+
+        desenharMural();
+
+      }
+    );
+
+  }
+
+
+  /* ==========================
+     VOLTAR DA PUBLICAÇÃO
+  ========================== */
+
+  var voltarPublicar =
+    document.getElementById(
+      "voltar-publicar"
+    );
+
+  if (voltarPublicar) {
+
+    voltarPublicar.addEventListener(
+      "click",
+      function () {
+
+        estado.pagina =
+          "mural";
+
+        estado.aba =
+          "mural";
+
+        mostrarPaginaAtual();
+
+        desenharMural();
+
+      }
+    );
+
+  }
+
+
+  /* ==========================
+     NOTIFICAÇÕES
+  ========================== */
+
+  var marcarNotificacoes =
+    document.getElementById(
+      "marcar-notificacoes"
+    );
+
+  if (marcarNotificacoes) {
+
+    marcarNotificacoes.addEventListener(
+      "click",
+      function () {
+
+        marcarTodasComoLidas();
+
+      }
+    );
+
+  }
+
+
+  /* ==========================
+     RODAPÉ
+  ========================== */
+
+  var base =
+    document.getElementById(
+      "base"
+    );
+
+  if (base) {
+
+    base.textContent =
+      "base: " +
+      DADOS.codigo;
+
+  }
+
+
+  /* ==========================
+     PRIMEIRO DESENHO
+  ========================== */
 
   desenhar();
 
 }
 
+
+/* ==============================
+   EXECUTAR
+============================== */
 
 iniciar();
