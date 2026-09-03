@@ -1,12 +1,3 @@
-/* =====================================================
-   VIVEIRO — aplicação
-===================================================== */
-
-
-/* ==============================
-   ESTADO
-============================== */
-
 var estado = {
   pessoa: null,
   busca: "",
@@ -18,1954 +9,1314 @@ var estado = {
 };
 
 
-/* ==============================
-   PESSOAS E IDEIAS
-============================== */
+/* =========================================================
+   PESSOAS
+========================================================= */
 
 function pessoaPorId(id) {
-
   return DADOS.pessoas.find(function (pessoa) {
     return Number(pessoa.id) === Number(id);
   });
-
 }
 
 
 function ideiaPorId(id) {
-
   return DADOS.ideias.find(function (ideia) {
     return Number(ideia.id) === Number(id);
   });
-
 }
 
 
 function nomeDe(id) {
-
   var pessoa = pessoaPorId(id);
 
-  if (!pessoa) {
-    return "Pessoa desconhecida";
+  if (pessoa) {
+    return pessoa.nome;
   }
 
-  return pessoa.nome;
-
+  return "Pessoa desconhecida";
 }
 
 
-/* ==============================
+/* =========================================================
    ARQUIVO
-============================== */
+========================================================= */
 
 function lerArquivadas() {
-
   try {
-
-    var dados =
-      localStorage.getItem("viveiro_arquivadas");
-
-    return dados ? JSON.parse(dados) : [];
-
+    return JSON.parse(
+      localStorage.getItem("viveiro_arquivadas") || "[]"
+    );
   } catch (erro) {
-
     return [];
-
   }
-
 }
 
 
 function salvarArquivadas(lista) {
-
   localStorage.setItem(
     "viveiro_arquivadas",
     JSON.stringify(lista)
   );
-
 }
 
 
 function ideiaArquivada(id) {
-
-  return (
-    lerArquivadas().indexOf(Number(id)) !== -1
-  );
-
+  return lerArquivadas().includes(Number(id));
 }
 
 
 function arquivarIdeia(id) {
-
   var lista = lerArquivadas();
 
-  id = Number(id);
-
-  if (lista.indexOf(id) === -1) {
-
-    lista.push(id);
-
-    salvarArquivadas(lista);
-
+  if (!lista.includes(Number(id))) {
+    lista.push(Number(id));
   }
 
-  desenhar();
+  salvarArquivadas(lista);
 
+  estado.pagina = "mural";
+  estado.aba = "mural";
+
+  desenhar();
 }
 
 
 function desarquivarIdeia(id) {
-
-  id = Number(id);
-
-  var lista =
-    lerArquivadas().filter(function (item) {
-
-      return Number(item) !== id;
-
-    });
+  var lista = lerArquivadas().filter(function (item) {
+    return Number(item) !== Number(id);
+  });
 
   salvarArquivadas(lista);
 
   desenhar();
-
 }
 
 
-/* ==============================
+/* =========================================================
    NOTIFICAÇÕES
-============================== */
+========================================================= */
 
 function lerNotificacoes() {
-
   try {
-
-    var dados =
-      localStorage.getItem("viveiro_notificacoes");
-
-    return dados ? JSON.parse(dados) : [];
-
+    return JSON.parse(
+      localStorage.getItem("viveiro_notificacoes") || "[]"
+    );
   } catch (erro) {
-
     return [];
-
   }
-
 }
 
 
 function salvarNotificacoes(lista) {
-
   localStorage.setItem(
     "viveiro_notificacoes",
     JSON.stringify(lista)
   );
-
 }
 
 
-function criarNotificacao(idIdeia, idInteressado) {
-
-  var ideia = ideiaPorId(idIdeia);
-
-  if (!ideia) {
-    return;
-  }
-
-  if (
-    Number(ideia.autor) ===
-    Number(idInteressado)
-  ) {
-    return;
-  }
-
+function criarNotificacao(texto, pessoaId) {
   var lista = lerNotificacoes();
 
   lista.unshift({
-
     id: Date.now(),
-
-    ideia: Number(idIdeia),
-
-    interessado: Number(idInteressado),
-
-    autor: Number(ideia.autor),
-
+    texto: texto,
+    pessoa: pessoaId,
     lida: false,
-
-    data: new Date().toISOString()
-
+    data: new Date().toLocaleDateString("pt-BR")
   });
 
   salvarNotificacoes(lista);
 
+  atualizarContadorNotificacoes();
 }
 
 
 function atualizarContadorNotificacoes() {
-
-  var contador =
-    document.getElementById(
-      "contador-notificacoes"
-    );
+  var contador = document.getElementById(
+    "contador-notificacoes"
+  );
 
   if (!contador) {
     return;
   }
 
-  var atual =
-    Number(estado.pessoa);
+  var lista = lerNotificacoes();
 
-  var quantidade =
-    lerNotificacoes().filter(
-      function (notificacao) {
+  var naoLidas = lista.filter(function (notificacao) {
+    return !notificacao.lida;
+  }).length;
 
-        return (
-          Number(notificacao.autor) === atual &&
-          !notificacao.lida
-        );
+  contador.textContent = naoLidas;
 
-      }
-    ).length;
-
-  contador.textContent =
-    quantidade;
-
+  if (naoLidas === 0) {
+    contador.style.display = "none";
+  } else {
+    contador.style.display = "inline-flex";
+  }
 }
 
 
 function marcarTodasComoLidas() {
+  var lista = lerNotificacoes();
 
-  var atual =
-    Number(estado.pessoa);
-
-  var lista =
-    lerNotificacoes();
-
-  lista.forEach(
-    function (notificacao) {
-
-      if (
-        Number(notificacao.autor) ===
-        atual
-      ) {
-
-        notificacao.lida = true;
-
-      }
-
-    }
-  );
+  lista.forEach(function (notificacao) {
+    notificacao.lida = true;
+  });
 
   salvarNotificacoes(lista);
 
-  desenharNotificacoes();
-
   atualizarContadorNotificacoes();
 
+  desenharNotificacoes();
 }
 
 
 function marcarNotificacaoComoLida(id) {
+  var lista = lerNotificacoes();
 
-  var lista =
-    lerNotificacoes();
-
-  lista.forEach(
-    function (notificacao) {
-
-      if (
-        Number(notificacao.id) ===
-        Number(id)
-      ) {
-
-        notificacao.lida = true;
-
-      }
-
+  lista.forEach(function (notificacao) {
+    if (Number(notificacao.id) === Number(id)) {
+      notificacao.lida = true;
     }
-  );
+  });
 
   salvarNotificacoes(lista);
 
-  desenharNotificacoes();
-
   atualizarContadorNotificacoes();
 
+  desenharNotificacoes();
 }
 
 
-/* ==============================
-   IDEIAS VISÍVEIS
-============================== */
+/* =========================================================
+   NORMALIZAÇÃO
+========================================================= */
+
+function normalizar(texto) {
+  return String(texto || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+
+/* =========================================================
+   PESQUISA E FILTROS
+========================================================= */
 
 function ideiasVisiveis() {
+  var ideias = DADOS.ideias.slice();
 
-  var texto =
-    estado.busca
-      .trim()
-      .toLowerCase();
+  /*
+    O Mural mostra TODAS as ideias,
+    exceto as que foram arquivadas.
+  */
 
-  var arquivadas =
-    lerArquivadas();
+  ideias = ideias.filter(function (ideia) {
+    return !ideiaArquivada(ideia.id);
+  });
 
-  return DADOS.ideias
 
-    .filter(
-      function (ideia) {
+  /*
+    Pesquisa por título, resumo ou tag.
+  */
 
-        return (
-          arquivadas.indexOf(
-            Number(ideia.id)
-          ) === -1
-        );
+  if (estado.busca.trim() !== "") {
+    var busca = normalizar(estado.busca);
 
-      }
-    )
+    ideias = ideias.filter(function (ideia) {
 
-    .filter(
-      function (ideia) {
+      var titulo = normalizar(ideia.titulo);
+      var resumo = normalizar(ideia.resumo);
 
-        if (!texto) {
-          return true;
-        }
+      var encontrouTag = ideia.tags.some(function (tag) {
+        return normalizar(tag).includes(busca);
+      });
 
-        var conteudo = [
+      return (
+        titulo.includes(busca) ||
+        resumo.includes(busca) ||
+        encontrouTag
+      );
+    });
+  }
 
-          ideia.titulo,
 
-          ideia.resumo,
+  /*
+    Filtro por tag.
+  */
 
-          (ideia.tags || []).join(" ")
+  if (estado.tag !== null) {
+    ideias = ideias.filter(function (ideia) {
+      return ideia.tags.some(function (tag) {
+        return normalizar(tag) === normalizar(estado.tag);
+      });
+    });
+  }
 
-        ]
-          .join(" ")
-          .toLowerCase();
 
-        return (
-          conteudo.indexOf(texto) !== -1
-        );
+  /*
+    Ideias mais novas primeiro.
+  */
 
-      }
-    )
+  ideias.sort(function (a, b) {
+    return Number(b.id) - Number(a.id);
+  });
 
-    .filter(
-      function (ideia) {
 
-        if (!estado.tag) {
-          return true;
-        }
-
-        return (
-          ideia.tags || []
-        ).some(
-          function (tag) {
-
-            return (
-              tag.toLowerCase() ===
-              estado.tag.toLowerCase()
-            );
-
-          }
-        );
-
-      }
-    )
-
-    .sort(
-      function (a, b) {
-
-        return (
-          Number(b.id) -
-          Number(a.id)
-        );
-
-      }
-    );
-
+  return ideias;
 }
 
 
-/* ==============================
-   CARD
-============================== */
+/* =========================================================
+   CARTÃO DE IDEIA
+========================================================= */
 
 function montarCartao(ideia) {
 
-  var card =
-    document.createElement("article");
+  var autor = pessoaPorId(ideia.autor);
 
-  card.className =
-    "cartao";
+  var nomeAutor = autor
+    ? autor.nome
+    : "Pessoa desconhecida";
 
 
-  /* título */
+  var tagsHTML = "";
 
-  var titulo =
-    document.createElement("h3");
+  if (Array.isArray(ideia.tags)) {
 
-  var botaoTitulo =
-    document.createElement("button");
+    tagsHTML = ideia.tags.map(function (tag) {
 
-  botaoTitulo.type =
-    "button";
+      return `
+        <button
+          class="tag"
+          type="button"
+          onclick="filtrarPorTag('${tag.replace(/'/g, "\\'")}')"
+        >
+          #${tag}
+        </button>
+      `;
 
-  botaoTitulo.textContent =
-    ideia.titulo;
-
-  botaoTitulo.addEventListener(
-    "click",
-    function () {
-
-      abrirIdeia(ideia.id);
-
-    }
-  );
-
-  titulo.appendChild(
-    botaoTitulo
-  );
-
-  card.appendChild(
-    titulo
-  );
-
-
-  /* resumo */
-
-  var resumo =
-    document.createElement("p");
-
-  resumo.textContent =
-    ideia.resumo ||
-    "Sem resumo.";
-
-  card.appendChild(
-    resumo
-  );
-
-
-  /* autor */
-
-  var autor =
-    document.createElement("p");
-
-  autor.className =
-    "autor";
-
-  autor.textContent =
-    nomeDe(ideia.autor);
-
-  autor.addEventListener(
-    "click",
-    function () {
-
-      abrirPessoa(
-        ideia.autor
-      );
-
-    }
-  );
-
-  card.appendChild(
-    autor
-  );
-
-
-  /* data */
-
-  var data =
-    document.createElement("span");
-
-  data.className =
-    "data";
-
-  data.textContent =
-    ideia.data || "";
-
-  card.appendChild(
-    data
-  );
-
-
-  /* tags */
-
-  var tags =
-    document.createElement("div");
-
-  tags.className =
-    "tags";
-
-
-  (ideia.tags || []).forEach(
-    function (nomeTag) {
-
-      var tag =
-        document.createElement("button");
-
-      tag.type =
-        "button";
-
-      tag.className =
-        "tag";
-
-      tag.textContent =
-        "#" + nomeTag;
-
-      tag.addEventListener(
-        "click",
-        function () {
-
-          estado.tag =
-            nomeTag;
-
-          desenharMural();
-
-        }
-      );
-
-      tags.appendChild(
-        tag
-      );
-
-    }
-  );
-
-
-  card.appendChild(
-    tags
-  );
-
-
-  /* apoios */
-
-  var apoios =
-    document.createElement("div");
-
-  apoios.className =
-    "apoios";
-
-
-  var quantidade =
-    document.createElement("span");
-
-  quantidade.textContent =
-    "♡ " +
-    Number(ideia.apoios || 0) +
-    " apoios";
-
-  apoios.appendChild(
-    quantidade
-  );
-
-
-  var atual =
-    Number(estado.pessoa);
-
-
-  /* interesse */
-
-  if (
-    Number(ideia.autor) !==
-    atual
-  ) {
-
-    var apoiar =
-      document.createElement("button");
-
-    apoiar.type =
-      "button";
-
-    apoiar.className =
-      "botao-secundario";
-
-    apoiar.textContent =
-      "Demonstrar interesse";
-
-    apoiar.addEventListener(
-      "click",
-      function () {
-
-        ideia.apoios =
-          Number(ideia.apoios || 0) + 1;
-
-        criarNotificacao(
-          ideia.id,
-          atual
-        );
-
-        desenhar();
-
-      }
-    );
-
-    apoios.appendChild(
-      apoiar
-    );
-
+    }).join("");
   }
 
 
-  /* arquivar */
+  var botaoArquivo = "";
 
   if (
-    Number(ideia.autor) ===
-    atual
+    estado.pessoa !== null &&
+    Number(estado.pessoa) === Number(ideia.autor)
   ) {
 
-    var arquivar =
-      document.createElement("button");
-
-    arquivar.type =
-      "button";
-
-    arquivar.className =
-      "botao-secundario";
-
-    arquivar.textContent =
-      ideiaArquivada(ideia.id)
-        ? "Desarquivar"
-        : "Arquivar";
-
-    arquivar.addEventListener(
-      "click",
-      function () {
-
-        if (
-          ideiaArquivada(
-            ideia.id
-          )
-        ) {
-
-          desarquivarIdeia(
-            ideia.id
-          );
-
-        } else {
-
-          arquivarIdeia(
-            ideia.id
-          );
-
-        }
-
-      }
-    );
-
-    apoios.appendChild(
-      arquivar
-    );
-
+    botaoArquivo = ideiaArquivada(ideia.id)
+      ? ""
+      : `
+        <button
+          class="acao-arquivar"
+          type="button"
+          onclick="event.stopPropagation(); arquivarIdeia(${ideia.id})"
+        >
+          Arquivar
+        </button>
+      `;
   }
 
 
-  card.appendChild(
-    apoios
-  );
+  return `
+    <article class="cartao-ideia">
+
+      <div class="cartao-topo">
+
+        <span class="cartao-data">
+          ${ideia.data || ""}
+        </span>
+
+        ${botaoArquivo}
+
+      </div>
 
 
-  return card;
+      <h3
+        class="cartao-titulo"
+        onclick="abrirIdeia(${ideia.id})"
+      >
+        ${ideia.titulo}
+      </h3>
 
+
+      <p class="cartao-resumo">
+        ${ideia.resumo}
+      </p>
+
+
+      <button
+        class="cartao-autor"
+        type="button"
+        onclick="abrirPessoa(${ideia.autor})"
+      >
+        ${nomeAutor}
+      </button>
+
+
+      <div class="cartao-tags">
+        ${tagsHTML}
+      </div>
+
+
+      <div class="cartao-rodape">
+
+        <button
+          class="botao-apoio"
+          type="button"
+          onclick="event.stopPropagation(); apoiarIdeia(${ideia.id})"
+        >
+          ♡ ${ideia.apoios || 0}
+        </button>
+
+        <button
+          class="botao-ver"
+          type="button"
+          onclick="abrirIdeia(${ideia.id})"
+        >
+          Ver ideia →
+        </button>
+
+      </div>
+
+    </article>
+  `;
 }
 
 
-/* ==============================
+/* =========================================================
+   APOIAR IDEIA
+========================================================= */
+
+function apoiarIdeia(id) {
+
+  var ideia = ideiaPorId(id);
+
+  if (!ideia) {
+    return;
+  }
+
+  ideia.apoios = Number(ideia.apoios || 0) + 1;
+
+
+  if (
+    estado.pessoa !== null &&
+    Number(estado.pessoa) !== Number(ideia.autor)
+  ) {
+
+    criarNotificacao(
+      nomeDe(estado.pessoa) +
+      " apoiou sua ideia: " +
+      ideia.titulo,
+      ideia.autor
+    );
+  }
+
+
+  desenhar();
+}
+
+
+/* =========================================================
+   FILTRO POR TAG
+========================================================= */
+
+function filtrarPorTag(tag) {
+
+  estado.tag = tag;
+  estado.busca = "";
+
+  estado.aba = "mural";
+  estado.pagina = "mural";
+
+  desenhar();
+}
+
+
+/* =========================================================
    MURAL
-============================== */
+========================================================= */
 
 function desenharMural() {
 
-  var area =
-    document.getElementById(
-      "cartoes"
-    );
+  var cartoes = document.getElementById("cartoes");
+  var contagem = document.getElementById("contagem");
 
-  if (!area) {
+  if (!cartoes) {
     return;
   }
 
-  area.innerHTML =
-    "";
+  cartoes.innerHTML = "";
 
 
-  var ideias =
-    ideiasVisiveis();
+  /*
+    PEGA TODAS AS IDEIAS DO DADOS_E.JS
+  */
 
+  var ideias = ideiasVisiveis();
 
-  var contagem =
-    document.getElementById(
-      "contagem"
-    );
 
   if (contagem) {
-
     contagem.textContent =
       ideias.length +
-      (
-        ideias.length === 1
-          ? " ideia"
-          : " ideias"
-      );
-
+      (ideias.length === 1 ? " ideia" : " ideias");
   }
 
 
-  var filtro =
-    document.getElementById(
-      "filtro-ativo"
-    );
+  if (ideias.length === 0) {
 
-
-  if (filtro) {
-
-    if (estado.tag) {
-
-      filtro.innerHTML =
-        'Filtro ativo: <strong>#' +
-        estado.tag +
-        '</strong> ' +
-        '<button id="limpar-filtro" ' +
-        'class="botao-secundario" ' +
-        'type="button">limpar</button>';
-
-      document
-        .getElementById(
-          "limpar-filtro"
-        )
-        .addEventListener(
-          "click",
-          function () {
-
-            estado.tag =
-              null;
-
-            desenharMural();
-
-          }
-        );
-
-    } else {
-
-      filtro.textContent =
-        "";
-
-    }
-
-  }
-
-
-  if (
-    ideias.length === 0
-  ) {
-
-    var vazio =
-      document.createElement("div");
-
-    vazio.className =
-      "vazio";
-
-    vazio.innerHTML =
-      "<strong>Nenhuma ideia encontrada</strong>" +
-      "Tente mudar a busca ou remover o filtro.";
-
-    area.appendChild(
-      vazio
-    );
+    cartoes.innerHTML = `
+      <div class="vazio">
+        <p>Nenhuma ideia encontrada.</p>
+      </div>
+    `;
 
     return;
-
   }
 
 
-  ideias.forEach(
-    function (ideia) {
+  ideias.forEach(function (ideia) {
 
-      area.appendChild(
-        montarCartao(
-          ideia
-        )
-      );
+    cartoes.innerHTML += montarCartao(ideia);
 
-    }
-  );
-
+  });
 }
 
 
-/* ==============================
+/* =========================================================
    PÁGINA DA IDEIA
-============================== */
+========================================================= */
 
 function abrirIdeia(id) {
 
-  estado.ideiaAberta =
-    Number(id);
-
-  estado.pagina =
-    "pagina-ideia";
-
-  mostrarPaginaAtual();
+  estado.ideiaAberta = Number(id);
+  estado.pagina = "ideia";
 
   desenharIdeia();
-
+  mostrarPaginaAtual();
 }
 
 
 function desenharIdeia() {
 
-  var area =
-    document.getElementById(
-      "conteudo-ideia"
-    );
+  var conteudo = document.getElementById(
+    "conteudo-ideia"
+  );
 
-  var ideia =
-    ideiaPorId(
-      estado.ideiaAberta
-    );
+  if (!conteudo) {
+    return;
+  }
 
+  var ideia = ideiaPorId(estado.ideiaAberta);
 
-  if (
-    !area ||
-    !ideia
-  ) {
+  if (!ideia) {
+    conteudo.innerHTML = `
+      <p>Ideia não encontrada.</p>
+    `;
     return;
   }
 
 
-  area.innerHTML =
-    "";
+  var autor = pessoaPorId(ideia.autor);
 
 
-  var titulo =
-    document.createElement("h2");
+  var tagsHTML = "";
 
-  titulo.textContent =
-    ideia.titulo;
+  if (Array.isArray(ideia.tags)) {
 
-  area.appendChild(
-    titulo
-  );
+    tagsHTML = ideia.tags.map(function (tag) {
 
+      return `
+        <button
+          class="tag"
+          type="button"
+          onclick="filtrarPorTag('${tag.replace(/'/g, "\\'")}')"
+        >
+          #${tag}
+        </button>
+      `;
 
-  var autor =
-    document.createElement("p");
-
-  autor.textContent =
-    "Publicado por " +
-    nomeDe(ideia.autor) +
-    " em " +
-    ideia.data;
-
-  area.appendChild(
-    autor
-  );
+    }).join("");
+  }
 
 
-  var resumo =
-    document.createElement("p");
+  var botaoArquivo = "";
 
-  resumo.className =
-    "resumo";
+  if (
+    estado.pessoa !== null &&
+    Number(estado.pessoa) === Number(ideia.autor)
+  ) {
 
-  resumo.textContent =
-    ideia.resumo ||
-    "Sem resumo.";
+    if (ideiaArquivada(ideia.id)) {
 
-  area.appendChild(
-    resumo
-  );
+      botaoArquivo = `
+        <button
+          type="button"
+          onclick="desarquivarIdeia(${ideia.id})"
+        >
+          Desarquivar
+        </button>
+      `;
 
+    } else {
 
-  var tags =
-    document.createElement("div");
-
-  tags.className =
-    "tags";
-
-
-  (ideia.tags || []).forEach(
-    function (nomeTag) {
-
-      var tag =
-        document.createElement("button");
-
-      tag.type =
-        "button";
-
-      tag.className =
-        "tag";
-
-      tag.textContent =
-        "#" + nomeTag;
-
-      tag.addEventListener(
-        "click",
-        function () {
-
-          estado.tag =
-            nomeTag;
-
-          estado.pagina =
-            "mural";
-
-          estado.aba =
-            "mural";
-
-          mostrarPaginaAtual();
-
-          desenharMural();
-
-        }
-      );
-
-      tags.appendChild(
-        tag
-      );
-
+      botaoArquivo = `
+        <button
+          type="button"
+          onclick="arquivarIdeia(${ideia.id})"
+        >
+          Arquivar
+        </button>
+      `;
     }
-  );
-
-
-  area.appendChild(
-    tags
-  );
-
-
-  var info =
-    document.createElement("div");
-
-  info.className =
-    "apoios";
-
-  info.textContent =
-    "♡ " +
-    Number(ideia.apoios || 0) +
-    " pessoas demonstraram interesse";
-
-  area.appendChild(
-    info
-  );
-
-
-  var atual =
-    Number(estado.pessoa);
-
-
-  if (
-    Number(ideia.autor) !==
-    atual
-  ) {
-
-    var apoiar =
-      document.createElement("button");
-
-    apoiar.type =
-      "button";
-
-    apoiar.className =
-      "botao-principal";
-
-    apoiar.textContent =
-      "Demonstrar interesse";
-
-    apoiar.addEventListener(
-      "click",
-      function () {
-
-        ideia.apoios =
-          Number(ideia.apoios || 0) + 1;
-
-        criarNotificacao(
-          ideia.id,
-          atual
-        );
-
-        desenharIdeia();
-
-        atualizarContadorNotificacoes();
-
-      }
-    );
-
-    area.appendChild(
-      apoiar
-    );
-
   }
 
 
-  if (
-    Number(ideia.autor) ===
-    atual
-  ) {
+  conteudo.innerHTML = `
 
-    var arquivar =
-      document.createElement("button");
+    <article class="pagina-ideia-conteudo">
 
-    arquivar.type =
-      "button";
+      <span class="cartao-data">
+        ${ideia.data || ""}
+      </span>
 
-    arquivar.className =
-      "botao-secundario";
+      <h2>
+        ${ideia.titulo}
+      </h2>
 
-    arquivar.style.marginLeft =
-      "8px";
+      <button
+        class="cartao-autor"
+        type="button"
+        onclick="abrirPessoa(${ideia.autor})"
+      >
+        ${autor ? autor.nome : "Pessoa desconhecida"}
+      </button>
 
-    arquivar.textContent =
-      ideiaArquivada(ideia.id)
-        ? "Desarquivar"
-        : "Arquivar";
+      <p class="ideia-resumo">
+        ${ideia.resumo}
+      </p>
 
-    arquivar.addEventListener(
-      "click",
-      function () {
+      <div class="cartao-tags">
+        ${tagsHTML}
+      </div>
 
-        if (
-          ideiaArquivada(
-            ideia.id
-          )
-        ) {
+      <div class="ideia-apoios">
+        ♡ ${ideia.apoios || 0} apoios
+      </div>
 
-          desarquivarIdeia(
-            ideia.id
-          );
+      <div class="ideia-acoes">
 
-        } else {
+        <button
+          type="button"
+          onclick="apoiarIdeia(${ideia.id})"
+        >
+          Apoiar ideia
+        </button>
 
-          arquivarIdeia(
-            ideia.id
-          );
+        ${botaoArquivo}
 
-        }
+      </div>
 
-        desenharIdeia();
+    </article>
 
-      }
-    );
-
-    area.appendChild(
-      arquivar
-    );
-
-  }
-
+  `;
 }
 
 
-/* ==============================
+/* =========================================================
    PÁGINA DA PESSOA
-============================== */
+========================================================= */
 
 function abrirPessoa(id) {
 
-  estado.pessoaAberta =
-    Number(id);
-
-  estado.pagina =
-    "pagina-pessoa";
-
-  mostrarPaginaAtual();
+  estado.pessoaAberta = Number(id);
+  estado.pagina = "pessoa";
 
   desenharPessoa();
-
+  mostrarPaginaAtual();
 }
 
 
 function desenharPessoa() {
 
-  var area =
-    document.getElementById(
-      "conteudo-pessoa"
-    );
+  var conteudo = document.getElementById(
+    "conteudo-pessoa"
+  );
 
-  var pessoa =
-    pessoaPorId(
-      estado.pessoaAberta
-    );
+  if (!conteudo) {
+    return;
+  }
 
+  var pessoa = pessoaPorId(estado.pessoaAberta);
 
-  if (
-    !area ||
-    !pessoa
-  ) {
+  if (!pessoa) {
+    conteudo.innerHTML = `
+      <p>Pessoa não encontrada.</p>
+    `;
     return;
   }
 
 
-  area.innerHTML =
-    "";
+  var ideias = DADOS.ideias.filter(function (ideia) {
 
-
-  var titulo =
-    document.createElement("h2");
-
-  titulo.textContent =
-    pessoa.nome;
-
-  area.appendChild(
-    titulo
-  );
-
-
-  var tipo =
-    document.createElement("p");
-
-  tipo.textContent =
-    (pessoa.tipo || "usuário") +
-    " • " +
-    (pessoa.curso || "");
-
-  area.appendChild(
-    tipo
-  );
-
-
-  if (
-    pessoa.interesses &&
-    pessoa.interesses.length
-  ) {
-
-    var tituloInteresses =
-      document.createElement("h3");
-
-    tituloInteresses.textContent =
-      "Interesses";
-
-    area.appendChild(
-      tituloInteresses
+    return (
+      Number(ideia.autor) === Number(pessoa.id) &&
+      !ideiaArquivada(ideia.id)
     );
 
-
-    var interesses =
-      document.createElement("div");
-
-    interesses.className =
-      "interesses";
+  });
 
 
-    pessoa.interesses.forEach(
-      function (interesse) {
+  var ideiasHTML = "";
 
-        var tag =
-          document.createElement("span");
+  if (ideias.length === 0) {
 
-        tag.className =
-          "tag";
+    ideiasHTML = `
+      <p class="vazio">
+        Esta pessoa ainda não publicou ideias.
+      </p>
+    `;
 
-        tag.textContent =
-          "#" + interesse;
+  } else {
 
-        interesses.appendChild(
-          tag
-        );
+    ideiasHTML = ideias.map(function (ideia) {
 
-      }
-    );
+      return `
+        <div class="mini-ideia">
 
+          <button
+            type="button"
+            onclick="abrirIdeia(${ideia.id})"
+          >
+            ${ideia.titulo}
+          </button>
 
-    area.appendChild(
-      interesses
-    );
+          <span>
+            ${ideia.apoios || 0} apoios
+          </span>
 
+        </div>
+      `;
+
+    }).join("");
   }
 
 
-  var tituloIdeias =
-    document.createElement("h3");
+  conteudo.innerHTML = `
 
-  tituloIdeias.textContent =
-    "Ideias publicadas";
+    <article class="perfil">
 
-  tituloIdeias.style.marginTop =
-    "30px";
+      <h2>${pessoa.nome}</h2>
 
-  area.appendChild(
-    tituloIdeias
-  );
+      <p>
+        <strong>Tipo:</strong>
+        ${pessoa.tipo || "Não informado"}
+      </p>
 
+      <p>
+        <strong>Curso:</strong>
+        ${pessoa.curso || "Não informado"}
+      </p>
 
-  var ideias =
-    DADOS.ideias.filter(
-      function (ideia) {
-
-        return (
-          Number(ideia.autor) ===
-          Number(pessoa.id)
-        );
-
-      }
-    ).filter(
-      function (ideia) {
-
-        return !ideiaArquivada(
-          ideia.id
-        );
-
-      }
-    );
-
-
-  if (
-    ideias.length === 0
-  ) {
-
-    var vazio =
-      document.createElement("p");
-
-    vazio.textContent =
-      "Esta pessoa ainda não publicou ideias.";
-
-    area.appendChild(
-      vazio
-    );
-
-    return;
-
-  }
-
-
-  ideias.forEach(
-    function (ideia) {
-
-      var mini =
-        document.createElement("div");
-
-      mini.className =
-        "cartao";
-
-      mini.style.marginTop =
-        "12px";
-
-
-      var titulo =
-        document.createElement("h3");
-
-
-      var botao =
-        document.createElement("button");
-
-      botao.type =
-        "button";
-
-      botao.textContent =
-        ideia.titulo;
-
-      botao.addEventListener(
-        "click",
-        function () {
-
-          abrirIdeia(
-            ideia.id
-          );
-
+      <p>
+        <strong>Interesses:</strong>
+        ${
+          Array.isArray(pessoa.interesses)
+            ? pessoa.interesses.join(", ")
+            : "Não informado"
         }
-      );
+      </p>
 
+      <h3>Ideias publicadas</h3>
 
-      titulo.appendChild(
-        botao
-      );
+      <div class="lista-mini-ideias">
+        ${ideiasHTML}
+      </div>
 
-      mini.appendChild(
-        titulo
-      );
+    </article>
 
-
-      var resumo =
-        document.createElement("p");
-
-      resumo.textContent =
-        ideia.resumo;
-
-      mini.appendChild(
-        resumo
-      );
-
-
-      area.appendChild(
-        mini
-      );
-
-    }
-  );
-
+  `;
 }
 
 
-/* ==============================
+/* =========================================================
    GRUPOS
-============================== */
+========================================================= */
 
 function desenharGrupos() {
 
-  var lista =
-    document.getElementById(
-      "lista-grupos"
-    );
+  var lista = document.getElementById(
+    "lista-grupos"
+  );
 
   if (!lista) {
     return;
   }
 
-  lista.innerHTML =
-    "";
+  lista.innerHTML = "";
 
 
-  if (
-    !DADOS.grupos ||
-    DADOS.grupos.length === 0
-  ) {
+  DADOS.grupos.forEach(function (grupo) {
 
-    lista.innerHTML =
-      "<li>Nenhum grupo disponível.</li>";
-
-    return;
-
-  }
+    var membros = Array.isArray(grupo.membros)
+      ? grupo.membros
+      : [];
 
 
-  DADOS.grupos.forEach(
-    function (grupo) {
+    var membrosHTML = membros.map(function (id) {
 
-      var item =
-        document.createElement("li");
+      return `
+        <button
+          type="button"
+          class="membro-grupo"
+          onclick="abrirPessoa(${id})"
+        >
+          ${nomeDe(id)}
+        </button>
+      `;
 
-
-      var titulo =
-        document.createElement("h3");
-
-      titulo.textContent =
-        grupo.nome;
-
-      item.appendChild(
-        titulo
-      );
+    }).join("");
 
 
-      var descricao =
-        document.createElement("p");
+    lista.innerHTML += `
 
-      descricao.textContent =
-        grupo.descricao || "";
+      <article class="cartao-grupo">
 
-      item.appendChild(
-        descricao
-      );
+        <h3>
+          ${grupo.nome}
+        </h3>
 
+        <p>
+          ${grupo.descricao}
+        </p>
 
-      var membros =
-        document.createElement("p");
+        <div class="grupo-membros">
+          ${membrosHTML}
+        </div>
 
-      membros.textContent =
-        (grupo.membros || []).length +
-        " membros";
+      </article>
 
-      item.appendChild(
-        membros
-      );
-
-
-      lista.appendChild(
-        item
-      );
-
-    }
-  );
-
+    `;
+  });
 }
 
 
-/* ==============================
+/* =========================================================
    ARQUIVO
-============================== */
+========================================================= */
 
 function desenharArquivo() {
 
-  var area =
-    document.getElementById(
-      "lista-arquivo"
-    );
-
-  if (!area) {
-    return;
-  }
-
-  area.innerHTML =
-    "";
-
-
-  var atual =
-    Number(estado.pessoa);
-
-
-  var ideias =
-    DADOS.ideias.filter(
-      function (ideia) {
-
-        return (
-          Number(ideia.autor) === atual &&
-          ideiaArquivada(
-            ideia.id
-          )
-        );
-
-      }
-    );
-
-
-  if (
-    ideias.length === 0
-  ) {
-
-    area.innerHTML =
-      "<div class='vazio'>" +
-      "<strong>Nenhuma ideia arquivada</strong>" +
-      "As ideias que você arquivar aparecerão aqui." +
-      "</div>";
-
-    return;
-
-  }
-
-
-  ideias.forEach(
-    function (ideia) {
-
-      var card =
-        montarCartao(
-          ideia
-        );
-
-      card.classList.add(
-        "arquivada"
-      );
-
-      area.appendChild(
-        card
-      );
-
-    }
+  var lista = document.getElementById(
+    "lista-arquivo"
   );
 
+  if (!lista) {
+    return;
+  }
+
+  lista.innerHTML = "";
+
+
+  var arquivadas = lerArquivadas();
+
+
+  if (arquivadas.length === 0) {
+
+    lista.innerHTML = `
+      <div class="vazio">
+        <p>Nenhuma ideia arquivada.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  arquivadas.forEach(function (id) {
+
+    var ideia = ideiaPorId(id);
+
+    if (!ideia) {
+      return;
+    }
+
+
+    lista.innerHTML += `
+
+      <article class="cartao-ideia arquivada">
+
+        <span class="cartao-data">
+          ${ideia.data || ""}
+        </span>
+
+        <h3
+          class="cartao-titulo"
+          onclick="abrirIdeia(${ideia.id})"
+        >
+          ${ideia.titulo}
+        </h3>
+
+        <p class="cartao-resumo">
+          ${ideia.resumo}
+        </p>
+
+        <button
+          type="button"
+          class="cartao-autor"
+          onclick="abrirPessoa(${ideia.autor})"
+        >
+          ${nomeDe(ideia.autor)}
+        </button>
+
+        <div class="cartao-rodape">
+
+          <button
+            type="button"
+            onclick="desarquivarIdeia(${ideia.id})"
+          >
+            Desarquivar
+          </button>
+
+        </div>
+
+      </article>
+
+    `;
+  });
 }
 
 
-/* ==============================
+/* =========================================================
    NOTIFICAÇÕES
-============================== */
+========================================================= */
 
 function desenharNotificacoes() {
 
-  var area =
-    document.getElementById(
-      "lista-notificacoes"
-    );
-
-  if (!area) {
-    return;
-  }
-
-  area.innerHTML =
-    "";
-
-
-  var atual =
-    Number(estado.pessoa);
-
-
-  var lista =
-    lerNotificacoes().filter(
-      function (notificacao) {
-
-        return (
-          Number(notificacao.autor) ===
-          atual
-        );
-
-      }
-    );
-
-
-  if (
-    lista.length === 0
-  ) {
-
-    area.innerHTML =
-      "<div class='vazio'>" +
-      "<strong>Nenhuma notificação</strong>" +
-      "Quando alguém demonstrar interesse em uma das suas ideias, aparecerá aqui." +
-      "</div>";
-
-    return;
-
-  }
-
-
-  lista.forEach(
-    function (notificacao) {
-
-      var ideia =
-        ideiaPorId(
-          notificacao.ideia
-        );
-
-
-      if (!ideia) {
-        return;
-      }
-
-
-      var card =
-        document.createElement("div");
-
-      card.className =
-        "notificacao";
-
-
-      if (
-        !notificacao.lida
-      ) {
-
-        card.classList.add(
-          "nao-lida"
-        );
-
-      }
-
-
-      var texto =
-        document.createElement("p");
-
-      texto.innerHTML =
-        "<strong>" +
-        nomeDe(
-          notificacao.interessado
-        ) +
-        "</strong> demonstrou interesse na ideia <strong>" +
-        ideia.titulo +
-        "</strong>.";
-
-      card.appendChild(
-        texto
-      );
-
-
-      var data =
-        document.createElement("small");
-
-      data.textContent =
-        notificacao.lida
-          ? "Notificação lida"
-          : "Nova notificação";
-
-      card.appendChild(
-        data
-      );
-
-
-      if (
-        !notificacao.lida
-      ) {
-
-        var botao =
-          document.createElement("button");
-
-        botao.type =
-          "button";
-
-        botao.className =
-          "botao-secundario";
-
-        botao.textContent =
-          "Marcar como lida";
-
-        botao.addEventListener(
-          "click",
-          function () {
-
-            marcarNotificacaoComoLida(
-              notificacao.id
-            );
-
-          }
-        );
-
-        card.appendChild(
-          botao
-        );
-
-      }
-
-
-      area.appendChild(
-        card
-      );
-
-    }
+  var lista = document.getElementById(
+    "lista-notificacoes"
   );
 
+  if (!lista) {
+    return;
+  }
+
+  lista.innerHTML = "";
+
+
+  var notificacoes = lerNotificacoes();
+
+
+  if (notificacoes.length === 0) {
+
+    lista.innerHTML = `
+      <div class="vazio">
+        <p>Nenhuma notificação.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  notificacoes.forEach(function (notificacao) {
+
+    lista.innerHTML += `
+
+      <article
+        class="notificacao ${
+          notificacao.lida ? "lida" : "nao-lida"
+        }"
+      >
+
+        <p>
+          ${notificacao.texto}
+        </p>
+
+        <span>
+          ${notificacao.data}
+        </span>
+
+        ${
+          !notificacao.lida
+            ? `
+              <button
+                type="button"
+                onclick="marcarNotificacaoComoLida(${notificacao.id})"
+              >
+                Marcar como lida
+              </button>
+            `
+            : ""
+        }
+
+      </article>
+
+    `;
+  });
 }
 
 
-/* ==============================
-   PUBLICAR IDEIA
-============================== */
+/* =========================================================
+   PUBLICAÇÃO DE IDEIA
+========================================================= */
 
 function publicarIdeia() {
 
-  var titulo =
-    document.getElementById(
-      "titulo-ideia"
-    ).value.trim();
+  var tituloInput = document.getElementById(
+    "titulo-ideia"
+  );
 
+  var resumoInput = document.getElementById(
+    "resumo-ideia"
+  );
 
-  var resumo =
-    document.getElementById(
-      "resumo-ideia"
-    ).value.trim();
+  var tagsInput = document.getElementById(
+    "tags-ideia"
+  );
 
-
-  var tagsTexto =
-    document.getElementById(
-      "tags-ideia"
-    ).value.trim();
-
-
-  var erro =
-    document.getElementById(
-      "erro-ideia"
-    );
-
-
-  /* limpa mensagem */
-
-  erro.textContent =
-    "";
-
-
-  /* título obrigatório */
-
-  if (
-    titulo === ""
-  ) {
-
-    erro.textContent =
-      "Digite um título para a ideia.";
-
-    return;
-
-  }
-
-
-  /* tags */
-
-  var tags = [];
-
-  if (
-    tagsTexto !== ""
-  ) {
-
-    tags =
-      tagsTexto
-        .split(",")
-        .map(
-          function (tag) {
-
-            return tag.trim();
-
-          }
-        )
-        .filter(
-          function (tag) {
-
-            return tag !== "";
-
-          }
-        );
-
-  }
-
-
-  /* remove tags repetidas */
-
-  tags =
-    tags.filter(
-      function (tag, indice) {
-
-        return (
-          tags.indexOf(tag) ===
-          indice
-        );
-
-      }
-    );
-
-
-  /* próximo ID */
-
-  var maiorId = 0;
-
-  DADOS.ideias.forEach(
-    function (ideia) {
-
-      var id =
-        Number(ideia.id);
-
-      if (
-        id > maiorId
-      ) {
-
-        maiorId =
-          id;
-
-      }
-
-    }
+  var erro = document.getElementById(
+    "erro-ideia"
   );
 
 
-  /* nova ideia */
+  if (!tituloInput || !resumoInput || !tagsInput) {
+
+    console.error(
+      "Os campos da publicação não foram encontrados."
+    );
+
+    return;
+  }
+
+
+  var titulo = tituloInput.value.trim();
+  var resumo = resumoInput.value.trim();
+  var tagsTexto = tagsInput.value.trim();
+
+
+  if (erro) {
+    erro.textContent = "";
+  }
+
+
+  /*
+    Verifica se existe uma pessoa selecionada.
+  */
+
+  if (estado.pessoa === null) {
+
+    if (erro) {
+      erro.textContent =
+        "Selecione uma pessoa antes de publicar.";
+    }
+
+    return;
+  }
+
+
+  /*
+    Verifica título e resumo.
+  */
+
+  if (titulo === "") {
+
+    if (erro) {
+      erro.textContent =
+        "Digite um título para a ideia.";
+    }
+
+    tituloInput.focus();
+
+    return;
+  }
+
+
+  if (resumo === "") {
+
+    if (erro) {
+      erro.textContent =
+        "Digite uma descrição para a ideia.";
+    }
+
+    resumoInput.focus();
+
+    return;
+  }
+
+
+  /*
+    Transforma as tags em array.
+    Exemplo:
+    tecnologia, educação, projeto
+
+    vira:
+
+    ["tecnologia", "educação", "projeto"]
+  */
+
+  var tags = [];
+
+  if (tagsTexto !== "") {
+
+    tags = tagsTexto
+      .split(",")
+      .map(function (tag) {
+        return tag.trim();
+      })
+      .filter(function (tag) {
+        return tag !== "";
+      });
+  }
+
+
+  /*
+    Gera o próximo ID.
+  */
+
+  var novoId = 1;
+
+
+  if (DADOS.ideias.length > 0) {
+
+    novoId =
+      Math.max.apply(
+        null,
+        DADOS.ideias.map(function (ideia) {
+          return Number(ideia.id);
+        })
+      ) + 1;
+  }
+
+
+  /*
+    Cria a nova ideia.
+  */
 
   var novaIdeia = {
 
-    id:
-      maiorId + 1,
+    id: novoId,
 
-    titulo:
-      titulo,
+    titulo: titulo,
 
-    resumo:
-      resumo,
+    resumo: resumo,
 
-    autor:
-      Number(estado.pessoa),
+    autor: Number(estado.pessoa),
 
-    tags:
-      tags,
+    tags: tags,
 
-    data:
-      new Date()
-        .toLocaleDateString(
-          "pt-BR"
-        ),
+    data: new Date().toLocaleDateString("pt-BR"),
 
-    apoios:
-      0
+    apoios: 0
 
   };
 
 
-  /* adiciona a ideia */
+  /*
+    COLOCA A NOVA IDEIA NO ARRAY.
 
-  DADOS.ideias.unshift(
+    É ISSO QUE FAZ ELA APARECER NO MURAL.
+  */
+
+  DADOS.ideias.unshift(novaIdeia);
+
+
+  console.log(
+    "Nova ideia publicada:",
     novaIdeia
   );
 
-
-  /* limpa formulário */
-
-  document
-    .getElementById(
-      "form-ideia"
-    )
-    .reset();
+  console.log(
+    "Total de ideias:",
+    DADOS.ideias.length
+  );
 
 
-  /* limpa busca/filtro */
+  /*
+    Limpa o formulário.
+  */
 
-  estado.busca =
-    "";
+  var form = document.getElementById(
+    "form-ideia"
+  );
 
-  estado.tag =
-    null;
-
-
-  document
-    .getElementById(
-      "busca"
-    )
-    .value =
-    "";
+  if (form) {
+    form.reset();
+  }
 
 
-  /* mostra sucesso */
+  /*
+    Remove pesquisa e filtros.
+  */
 
-  erro.textContent =
-    "Ideia publicada com sucesso!";
+  estado.busca = "";
+  estado.tag = null;
 
 
-  /* atualiza tudo */
+  /*
+    Volta para o Mural.
+  */
+
+  estado.aba = "mural";
+  estado.pagina = "mural";
+
+
+  /*
+    Redesenha a tela.
+  */
 
   desenhar();
 
 
-  /* mantém no mural */
+  /*
+    Mensagem de sucesso.
+  */
 
-  estado.aba =
-    "mural";
+  if (erro) {
 
-  estado.pagina =
-    "mural";
+    erro.textContent =
+      "Ideia publicada com sucesso!";
 
-  mostrarPaginaAtual();
+    erro.style.color = "#4f7a52";
+  }
 
 
-  setTimeout(
-    function () {
+  /*
+    Remove a mensagem depois de alguns segundos.
+  */
 
-      erro.textContent =
-        "";
+  setTimeout(function () {
 
-    },
-    2500
-  );
+    if (erro) {
+      erro.textContent = "";
+    }
 
+  }, 3000);
 }
 
 
-/* ==============================
-   PÁGINAS
-============================== */
+/* =========================================================
+   ABAS / PÁGINAS
+========================================================= */
 
 function mostrarPaginaAtual() {
 
   var paginas = [
-
     "mural",
-
     "grupos",
-
     "arquivo",
-
     "notificacoes",
-
-    "pagina-pessoa",
-
-    "pagina-ideia",
-
-    "pagina-publicar"
-
+    "pessoa",
+    "ideia",
+    "publicar"
   ];
 
 
-  paginas.forEach(
-    function (id) {
+  paginas.forEach(function (pagina) {
 
-      var elemento =
-        document.getElementById(
-          id
-        );
+    var elemento = document.getElementById(
+      pagina === "mural"
+        ? "mural"
+        : pagina === "grupos"
+        ? "grupos"
+        : pagina === "arquivo"
+        ? "arquivo"
+        : pagina === "notificacoes"
+        ? "notificacoes"
+        : pagina === "pessoa"
+        ? "pagina-pessoa"
+        : pagina === "ideia"
+        ? "pagina-ideia"
+        : "pagina-publicar"
+    );
 
-      if (elemento) {
 
-        elemento.classList.add(
-          "escondido"
-        );
+    if (elemento) {
 
-      }
-
+      elemento.style.display =
+        estado.pagina === pagina
+          ? "block"
+          : "none";
     }
-  );
-
-
-  var atual =
-    document.getElementById(
-      estado.pagina
-    );
-
-
-  if (atual) {
-
-    atual.classList.remove(
-      "escondido"
-    );
-
-  }
-
-
-  atualizarAbas();
-
+  });
 }
 
 
-/* ==============================
-   TROCAR ABA
-============================== */
-
 function trocarAba(qual) {
 
-  estado.aba =
-    qual;
+  estado.aba = qual;
+  estado.pagina = qual;
 
-  estado.pagina =
-    qual;
 
   mostrarPaginaAtual();
 
   desenhar();
-
 }
 
 
-/* ==============================
-   ABAS
-============================== */
+/* =========================================================
+   ABAS VISUAIS
+========================================================= */
 
 function atualizarAbas() {
 
   var abas = [
-
-    {
-      id: "aba-mural",
-      pagina: "mural"
-    },
-
-    {
-      id: "aba-grupos",
-      pagina: "grupos"
-    },
-
-    {
-      id: "aba-arquivo",
-      pagina: "arquivo"
-    },
-
-    {
-      id: "aba-notificacoes",
-      pagina: "notificacoes"
-    }
-
+    "mural",
+    "grupos",
+    "arquivo",
+    "notificacoes"
   ];
 
 
-  abas.forEach(
-    function (item) {
+  abas.forEach(function (aba) {
 
-      var botao =
-        document.getElementById(
-          item.id
-        );
+    var botao = document.getElementById(
+      "aba-" + aba
+    );
 
-      if (!botao) {
-        return;
-      }
 
-      botao.classList.toggle(
-        "ativa",
-        estado.aba ===
-        item.pagina
+    if (!botao) {
+      return;
+    }
+
+
+    if (estado.aba === aba) {
+
+      botao.classList.add("ativa");
+
+      botao.setAttribute(
+        "aria-selected",
+        "true"
       );
 
-    }
-  );
+    } else {
 
+      botao.classList.remove("ativa");
+
+      botao.setAttribute(
+        "aria-selected",
+        "false"
+      );
+    }
+  });
 }
 
 
-/* ==============================
+/* =========================================================
    DESENHAR TUDO
-============================== */
+========================================================= */
 
 function desenhar() {
+
+  mostrarPaginaAtual();
+
+  atualizarAbas();
 
   desenharMural();
 
@@ -1980,95 +1331,158 @@ function desenhar() {
   desenharIdeia();
 
   atualizarContadorNotificacoes();
-
 }
 
 
-/* ==============================
+/* =========================================================
    INICIAR
-============================== */
+========================================================= */
 
 function iniciar() {
 
-  if (
-    !DADOS.pessoas ||
-    DADOS.pessoas.length === 0
-  ) {
-
-    console.error(
-      "Nenhuma pessoa encontrada em DADOS."
-    );
-
-    return;
-
-  }
+  var selectPessoa = document.getElementById(
+    "quem"
+  );
 
 
-  /* pessoa inicial */
+  /*
+    Preenche o select de pessoas.
+  */
 
-  estado.pessoa =
-    Number(
-      DADOS.pessoas[0].id
-    );
+  if (selectPessoa) {
 
+    selectPessoa.innerHTML = "";
 
-  /* ==========================
-     NAVEGANDO COMO
-  ========================== */
+    DADOS.pessoas.forEach(function (pessoa) {
 
-  var seletor =
-    document.getElementById(
-      "quem"
-    );
+      var option = document.createElement(
+        "option"
+      );
 
+      option.value = pessoa.id;
 
-  if (seletor) {
+      option.textContent = pessoa.nome;
 
-    seletor.innerHTML =
-      "";
+      selectPessoa.appendChild(option);
 
-    DADOS.pessoas.forEach(
-      function (pessoa) {
-
-        var option =
-          document.createElement(
-            "option"
-          );
-
-        option.value =
-          pessoa.id;
-
-        option.textContent =
-          pessoa.nome;
-
-        seletor.appendChild(
-          option
-        );
-
-      }
-    );
+    });
 
 
-    seletor.value =
-      estado.pessoa;
+    /*
+      Seleciona a primeira pessoa.
+    */
+
+    if (DADOS.pessoas.length > 0) {
+
+      estado.pessoa =
+        Number(DADOS.pessoas[0].id);
+
+      selectPessoa.value =
+        estado.pessoa;
+    }
 
 
-    seletor.addEventListener(
+    /*
+      Quando troca de pessoa.
+    */
+
+    selectPessoa.addEventListener(
       "change",
       function () {
 
         estado.pessoa =
-          Number(
-            this.value
-          );
+          Number(this.value);
 
-        estado.aba =
-          "mural";
+        desenhar();
 
-        estado.pagina =
-          "mural";
+      }
+    );
+  }
 
-        mostrarPaginaAtual();
+
+  /* =======================================================
+     ABAS
+  ======================================================= */
+
+  var abaMural =
+    document.getElementById("aba-mural");
+
+  var abaGrupos =
+    document.getElementById("aba-grupos");
+
+  var abaArquivo =
+    document.getElementById("aba-arquivo");
+
+  var abaNotificacoes =
+    document.getElementById("aba-notificacoes");
+
+
+  if (abaMural) {
+
+    abaMural.addEventListener(
+      "click",
+      function () {
+        trocarAba("mural");
+      }
+    );
+
+  }
+
+
+  if (abaGrupos) {
+
+    abaGrupos.addEventListener(
+      "click",
+      function () {
+        trocarAba("grupos");
+      }
+    );
+
+  }
+
+
+  if (abaArquivo) {
+
+    abaArquivo.addEventListener(
+      "click",
+      function () {
+        trocarAba("arquivo");
+      }
+    );
+
+  }
+
+
+  if (abaNotificacoes) {
+
+    abaNotificacoes.addEventListener(
+      "click",
+      function () {
+        trocarAba("notificacoes");
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     PESQUISA
+  ======================================================= */
+
+  var busca =
+    document.getElementById("busca");
+
+
+  if (busca) {
+
+    busca.addEventListener(
+      "input",
+      function () {
+
+        estado.busca = this.value;
+
+        estado.pagina = "mural";
+        estado.aba = "mural";
 
         desenhar();
 
@@ -2078,24 +1492,23 @@ function iniciar() {
   }
 
 
-  /* ==========================
-     ABAS
-  ========================== */
+  /* =======================================================
+     BOTÃO MARCAR NOTIFICAÇÕES
+  ======================================================= */
 
-  var abaMural =
+  var marcarNotificacoes =
     document.getElementById(
-      "aba-mural"
+      "marcar-notificacoes"
     );
 
-  if (abaMural) {
 
-    abaMural.addEventListener(
+  if (marcarNotificacoes) {
+
+    marcarNotificacoes.addEventListener(
       "click",
       function () {
 
-        trocarAba(
-          "mural"
-        );
+        marcarTodasComoLidas();
 
       }
     );
@@ -2103,98 +1516,9 @@ function iniciar() {
   }
 
 
-  var abaGrupos =
-    document.getElementById(
-      "aba-grupos"
-    );
-
-  if (abaGrupos) {
-
-    abaGrupos.addEventListener(
-      "click",
-      function () {
-
-        trocarAba(
-          "grupos"
-        );
-
-      }
-    );
-
-  }
-
-
-  var abaArquivo =
-    document.getElementById(
-      "aba-arquivo"
-    );
-
-  if (abaArquivo) {
-
-    abaArquivo.addEventListener(
-      "click",
-      function () {
-
-        trocarAba(
-          "arquivo"
-        );
-
-      }
-    );
-
-  }
-
-
-  var abaNotificacoes =
-    document.getElementById(
-      "aba-notificacoes"
-    );
-
-  if (abaNotificacoes) {
-
-    abaNotificacoes.addEventListener(
-      "click",
-      function () {
-
-        trocarAba(
-          "notificacoes"
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ==========================
-     BUSCA
-  ========================== */
-
-  var busca =
-    document.getElementById(
-      "busca"
-    );
-
-  if (busca) {
-
-    busca.addEventListener(
-      "input",
-      function () {
-
-        estado.busca =
-          this.value;
-
-        desenharMural();
-
-      }
-    );
-
-  }
-
-
-  /* ==========================
-     PUBLICAR IDEIA
-  ========================== */
+  /* =======================================================
+     FORMULÁRIO DE PUBLICAÇÃO
+  ======================================================= */
 
   var formIdeia =
     document.getElementById(
@@ -2218,14 +1542,15 @@ function iniciar() {
   }
 
 
-  /* ==========================
-     VOLTAR PESSOA
-  ========================== */
+  /* =======================================================
+     BOTÕES VOLTAR
+  ======================================================= */
 
   var voltarPessoa =
     document.getElementById(
       "voltar-pessoa"
     );
+
 
   if (voltarPessoa) {
 
@@ -2233,15 +1558,10 @@ function iniciar() {
       "click",
       function () {
 
-        estado.pagina =
-          "mural";
+        estado.pagina = "mural";
+        estado.aba = "mural";
 
-        estado.aba =
-          "mural";
-
-        mostrarPaginaAtual();
-
-        desenharMural();
+        desenhar();
 
       }
     );
@@ -2249,14 +1569,11 @@ function iniciar() {
   }
 
 
-  /* ==========================
-     VOLTAR IDEIA
-  ========================== */
-
   var voltarIdeia =
     document.getElementById(
       "voltar-ideia"
     );
+
 
   if (voltarIdeia) {
 
@@ -2264,15 +1581,10 @@ function iniciar() {
       "click",
       function () {
 
-        estado.pagina =
-          "mural";
+        estado.pagina = "mural";
+        estado.aba = "mural";
 
-        estado.aba =
-          "mural";
-
-        mostrarPaginaAtual();
-
-        desenharMural();
+        desenhar();
 
       }
     );
@@ -2280,14 +1592,11 @@ function iniciar() {
   }
 
 
-  /* ==========================
-     VOLTAR PUBLICAÇÃO
-  ========================== */
-
   var voltarPublicar =
     document.getElementById(
       "voltar-publicar"
     );
+
 
   if (voltarPublicar) {
 
@@ -2295,15 +1604,10 @@ function iniciar() {
       "click",
       function () {
 
-        estado.pagina =
-          "mural";
+        estado.pagina = "mural";
+        estado.aba = "mural";
 
-        estado.aba =
-          "mural";
-
-        mostrarPaginaAtual();
-
-        desenharMural();
+        desenhar();
 
       }
     );
@@ -2311,22 +1615,71 @@ function iniciar() {
   }
 
 
-  /* ==========================
-     NOTIFICAÇÕES
-  ========================== */
+  /* =======================================================
+     FORMULÁRIO ANTIGO DE PUBLICAÇÃO
+     
+     Mantido para não quebrar o HTML caso ele exista.
+  ======================================================= */
 
-  var marcarNotificacoes =
+  var formPublicar =
     document.getElementById(
-      "marcar-notificacoes"
+      "form-publicar"
     );
 
-  if (marcarNotificacoes) {
 
-    marcarNotificacoes.addEventListener(
-      "click",
-      function () {
+  if (formPublicar) {
 
-        marcarTodasComoLidas();
+    formPublicar.addEventListener(
+      "submit",
+      function (evento) {
+
+        evento.preventDefault();
+
+        var titulo =
+          document.getElementById(
+            "novo-titulo"
+          );
+
+        var resumo =
+          document.getElementById(
+            "novo-resumo"
+          );
+
+        var tags =
+          document.getElementById(
+            "novas-tags"
+          );
+
+        var tituloIdeia =
+          document.getElementById(
+            "titulo-ideia"
+          );
+
+        var resumoIdeia =
+          document.getElementById(
+            "resumo-ideia"
+          );
+
+        var tagsIdeia =
+          document.getElementById(
+            "tags-ideia"
+          );
+
+
+        if (tituloIdeia && titulo) {
+          tituloIdeia.value = titulo.value;
+        }
+
+        if (resumoIdeia && resumo) {
+          resumoIdeia.value = resumo.value;
+        }
+
+        if (tagsIdeia && tags) {
+          tagsIdeia.value = tags.value;
+        }
+
+
+        publicarIdeia();
 
       }
     );
@@ -2334,37 +1687,17 @@ function iniciar() {
   }
 
 
-  /* ==========================
-     BASE
-  ========================== */
-
-  var base =
-    document.getElementById(
-      "base"
-    );
-
-  if (base) {
-
-    base.textContent =
-      "base: " +
-      DADOS.codigo;
-
-  }
-
-
-  /* ==========================
-     INICIAR
-  ========================== */
-
-  mostrarPaginaAtual();
+  /* =======================================================
+     PRIMEIRO DESENHO
+  ======================================================= */
 
   desenhar();
 
 }
 
 
-/* ==============================
+/* =========================================================
    EXECUTAR
-============================== */
+========================================================= */
 
 iniciar();
