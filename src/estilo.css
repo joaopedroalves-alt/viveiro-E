@@ -1,178 +1,275 @@
 :root {
-  --papel: #F6F3EC;
-  --branco: #FFFFFF;
+  --fundo: #f5f3ec;
+  --branco: #ffffff;
 
-  --tinta: #26302A;
-  --suave: #7E897F;
+  --verde: #315f3b;
+  --verde-2: #477b50;
+  --verde-claro: #e8f0e5;
+  --verde-suave: #f0f5ed;
 
-  --verde: #4F7A52;
-  --verde-escuro: #365D3B;
-  --verde-claro: #E7EFE5;
+  --broto: #9dbb4b;
 
-  --broto: #8FB33F;
-  --broto-claro: #EEF4D9;
+  --texto: #26332a;
+  --texto-suave: #7d877f;
 
-  --terra: #B4622F;
+  --terra: #b4622f;
 
-  --sombra: rgba(38, 48, 42, .07);
+  --sombra: rgba(38, 51, 42, .08);
+  --sombra-forte: rgba(38, 51, 42, .13);
 }
 
 
-/* =========================
-   BASE
-   ========================= */
+/* ==============================
+   GERAL
+============================== */
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
 
-  background: var(--papel);
-  color: var(--tinta);
+  background: var(--fundo);
+  color: var(--texto);
 
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family:
+    "Segoe UI",
+    Calibri,
+    Arial,
+    sans-serif;
+
+  line-height: 1.5;
 }
 
 button,
 input,
 textarea,
 select {
-  font-family: inherit;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.escondido {
+  display: none !important;
 }
 
 
-/* =========================
-   HEADER
-   ========================= */
+/* ==============================
+   CABEÇALHO
+============================== */
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 20px 35px;
+  gap: 30px;
+
+  padding: 28px 7%;
 
   background: var(--verde);
-
   color: white;
-}
-
-.marca {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
 }
 
 .marca h1 {
   margin: 0;
 
-  font-size: 28px;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -.8px;
 }
 
 .lema {
+  display: block;
+
+  margin-top: 3px;
+
+  color: rgba(255, 255, 255, .72);
+
   font-size: 13px;
-  opacity: .8;
 }
 
 .sessao {
-  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 180px;
 }
 
 .sessao label {
-  margin-right: 6px;
+  color: rgba(255, 255, 255, .65);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: .7px;
 }
 
 .sessao select {
-  padding: 7px 10px;
+  padding: 9px 12px;
 
   border: none;
-  border-radius: 8px;
-
   outline: none;
-}
 
+  border-radius: 9px;
 
-/* =========================
-   ABAS
-   ========================= */
-
-.abas {
-  display: flex;
-
-  padding: 0 35px;
-
-  border-bottom: 1px solid rgba(38, 48, 42, .06);
-}
-
-.aba {
-  padding: 14px 18px;
-
-  border: none;
-  background: none;
-
-  color: var(--suave);
-
-  font-size: 15px;
+  background: rgba(255, 255, 255, .13);
+  color: white;
 
   cursor: pointer;
 }
 
+.sessao select option {
+  color: var(--texto);
+  background: white;
+}
+
+
+/* ==============================
+   ABAS
+============================== */
+
+.abas {
+  display: flex;
+
+  padding: 0 7%;
+
+  background: var(--branco);
+
+  box-shadow: 0 2px 10px var(--sombra);
+
+  position: relative;
+  z-index: 2;
+}
+
+.aba {
+  position: relative;
+
+  padding: 17px 22px;
+
+  border: none;
+  background: transparent;
+
+  color: var(--texto-suave);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition:
+    color .2s ease,
+    background .2s ease;
+}
+
+.aba:hover {
+  color: var(--verde);
+  background: var(--verde-suave);
+}
+
 .aba.ativa {
   color: var(--verde);
+}
 
+.aba.ativa::after {
+  content: "";
+
+  position: absolute;
+
+  left: 18px;
+  right: 18px;
+  bottom: 0;
+
+  height: 3px;
+
+  border-radius: 3px 3px 0 0;
+
+  background: var(--broto);
+}
+
+.contador-notificacoes {
+  display: inline-flex;
+
+  justify-content: center;
+  align-items: center;
+
+  min-width: 19px;
+  height: 19px;
+
+  margin-left: 6px;
+  padding: 0 5px;
+
+  border-radius: 20px;
+
+  background: var(--terra);
+  color: white;
+
+  font-size: 10px;
   font-weight: 700;
-
-  border-bottom: 3px solid var(--broto);
 }
 
 
-/* =========================
-   MAIN
-   ========================= */
+/* ==============================
+   CONTEÚDO
+============================== */
 
 main {
-  max-width: 1150px;
+  width: min(1180px, 86%);
 
-  margin: auto;
+  margin: 0 auto;
 
-  padding: 35px;
+  padding: 42px 0 60px;
 }
 
-main h2 {
-  color: var(--verde-escuro);
+main > section {
+  animation: aparecer .25s ease;
+}
 
-  font-size: 24px;
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
-/* =========================
-   PUBLICAR IDEIA
-   ========================= */
+/* ==============================
+   PUBLICAR NO MURAL
+============================== */
 
 .publicar {
   max-width: 850px;
 
-  margin: 0 auto 38px;
+  margin: 0 auto 42px;
 
-  padding: 25px;
+  padding: 26px;
 
   background: var(--branco);
 
-  border-radius: 16px;
+  border-radius: 18px;
 
-  box-shadow: 0 4px 18px var(--sombra);
+  box-shadow: 0 5px 22px var(--sombra);
 }
 
 .publicar h2 {
   margin: 0 0 20px;
 
   font-size: 21px;
+  font-weight: 650;
 }
-
-
-/* campos */
 
 .publicar input,
 .publicar textarea {
@@ -182,40 +279,42 @@ main h2 {
 
   margin-bottom: 10px;
 
-  padding: 12px 14px;
+  padding: 13px 14px;
 
   border: none;
   outline: none;
 
-  border-radius: 10px;
+  border-radius: 11px;
 
-  background: #F5F6F2;
+  background: #f5f6f2;
 
-  color: var(--tinta);
+  color: var(--texto);
 
   font-size: 14px;
+
+  transition:
+    background .2s ease,
+    box-shadow .2s ease;
 }
 
 .publicar textarea {
-  min-height: 100px;
+  min-height: 105px;
 
   resize: vertical;
 }
 
 .publicar input:focus,
 .publicar textarea:focus {
-  background: #F0F3ED;
+  background: #f0f3ed;
 
-  box-shadow: 0 0 0 2px rgba(79, 122, 82, .12);
+  box-shadow:
+    0 0 0 2px rgba(79, 122, 82, .13);
 }
 
 .publicar input::placeholder,
 .publicar textarea::placeholder {
-  color: #9AA39C;
+  color: #9aa39c;
 }
-
-
-/* botão */
 
 .publicar-footer {
   display: flex;
@@ -234,279 +333,360 @@ main h2 {
   font-size: 13px;
 }
 
-.publicar-btn {
-  padding: 10px 20px;
+
+/* ==============================
+   CABEÇALHO DO MURAL
+============================== */
+
+.mural-topo {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: end;
+
+  gap: 20px;
+
+  margin-bottom: 18px;
+}
+
+.mural-topo h2 {
+  margin: 0;
+
+  font-size: 26px;
+}
+
+.mural-topo p {
+  margin: 4px 0 0;
+
+  color: var(--texto-suave);
+
+  font-size: 14px;
+}
+
+.contagem {
+  color: var(--texto-suave);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* ==============================
+   BUSCA
+============================== */
+
+.barra {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+#busca {
+  width: 100%;
+
+  padding: 13px 16px;
 
   border: none;
-  border-radius: 9px;
+  outline: none;
+
+  border-radius: 11px;
+
+  background: var(--branco);
+
+  color: var(--texto);
+
+  box-shadow: 0 3px 14px var(--sombra);
+
+  transition: box-shadow .2s ease;
+}
+
+#busca:focus {
+  box-shadow:
+    0 0 0 2px rgba(79, 122, 82, .12),
+    0 4px 16px var(--sombra);
+}
+
+#busca::placeholder {
+  color: #9aa39c;
+}
+
+.filtro-ativo {
+  min-height: 20px;
+
+  margin: 10px 0 18px;
+
+  color: var(--verde);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* ==============================
+   BOTÕES
+============================== */
+
+.botao-principal,
+.publicar-btn {
+  border: none;
+
+  border-radius: 10px;
 
   background: var(--verde);
 
   color: white;
 
+  padding: 11px 18px;
+
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 650;
 
-  cursor: pointer;
+  transition:
+    background .2s ease,
+    transform .15s ease,
+    box-shadow .2s ease;
 }
 
+.botao-principal:hover,
 .publicar-btn:hover {
-  background: var(--verde-escuro);
+  background: var(--verde-2);
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 14px var(--sombra-forte);
 }
 
-
-/* =========================
-   BUSCA
-   ========================= */
-
-.barra {
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-
-  margin-bottom: 15px;
-}
-
-#busca {
-  width: 340px;
-
-  padding: 11px 15px;
+.botao-secundario {
+  padding: 10px 15px;
 
   border: none;
-  border-radius: 10px;
 
-  background: white;
+  border-radius: 9px;
 
-  outline: none;
+  background: var(--verde-claro);
 
-  box-shadow: 0 3px 12px var(--sombra);
-}
-
-.contagem {
-  color: var(--suave);
-
-  font-size: 14px;
-}
-
-
-/* =========================
-   FILTRO
-   ========================= */
-
-.filtro-ativo {
-  color: var(--terra);
+  color: var(--verde);
 
   font-size: 13px;
+  font-weight: 600;
 }
 
-.filtro-ativo button {
+.botao-secundario:hover {
+  background: #d7e5d5;
+}
+
+.botao-voltar {
+  margin-bottom: 20px;
+
+  padding: 8px 0;
+
   border: none;
 
-  padding: 4px 9px;
+  background: transparent;
 
-  border-radius: 7px;
+  color: var(--verde);
 
-  background: #F3E4DA;
+  font-size: 14px;
+  font-weight: 600;
+}
 
-  color: var(--terra);
-
-  cursor: pointer;
+.botao-voltar:hover {
+  color: var(--verde-2);
 }
 
 
-/* =========================
-   CARTÕES
-   ========================= */
+/* ==============================
+   CARDS DAS IDEIAS
+============================== */
 
 .cartoes {
   display: grid;
 
   grid-template-columns:
-    repeat(auto-fill, minmax(300px, 1fr));
+    repeat(auto-fill, minmax(280px, 1fr));
 
-  gap: 20px;
+  gap: 18px;
 }
 
 .cartao {
-  padding: 20px;
+  padding: 22px;
 
-  background: white;
+  border: none;
 
-  border-radius: 15px;
+  border-radius: 16px;
 
-  box-shadow: 0 4px 18px var(--sombra);
+  background: var(--branco);
+
+  box-shadow: 0 4px 16px var(--sombra);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.cartao:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 9px 25px var(--sombra-forte);
 }
 
 .cartao h3 {
-  margin: 0 0 7px;
-
-  color: var(--verde-escuro);
+  margin: 0 0 9px;
 
   font-size: 18px;
 
-  overflow-wrap: break-word;
+  line-height: 1.3;
 }
 
-.autoria {
-  margin-bottom: 12px;
-
-  color: var(--suave);
-
-  font-size: 12px;
-}
-
-.link-pessoa {
+.cartao h3 button {
   padding: 0;
 
   border: none;
+
   background: none;
+
+  color: var(--texto);
+
+  text-align: left;
+
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.cartao h3 button:hover {
+  color: var(--verde);
+}
+
+.cartao p {
+  color: #69736c;
+
+  font-size: 14px;
+}
+
+.cartao .autor {
+  margin: 12px 0 0;
 
   color: var(--verde);
 
+  font-size: 13px;
   font-weight: 600;
 
   cursor: pointer;
 }
 
-.resumo {
-  margin: 0 0 14px;
+.cartao .data {
+  color: var(--texto-suave);
 
-  color: #3E4941;
+  font-size: 12px;
 }
-
-
-/* =========================
-   TAGS
-   ========================= */
 
 .tags {
-  margin-bottom: 14px;
-}
-
-.etiqueta {
-  display: inline-block;
-
-  margin: 0 5px 5px 0;
-
-  padding: 4px 10px;
-
-  border-radius: 20px;
-
-  background: var(--verde-claro);
-
-  color: var(--verde);
-
-  font-size: 11px;
-
-  cursor: pointer;
-}
-
-.etiqueta:hover {
-  background: var(--broto);
-
-  color: white;
-}
-
-
-/* =========================
-   ESTADO
-   ========================= */
-
-.estado-ideia {
-  display: inline-block;
-
-  margin-bottom: 12px;
-
-  padding: 5px 10px;
-
-  border-radius: 20px;
-
-  background: var(--verde-claro);
-
-  color: var(--verde-escuro);
-
-  font-size: 11px;
-}
-
-
-/* =========================
-   RODAPÉ DO CARTÃO
-   ========================= */
-
-.rodape {
   display: flex;
-  align-items: center;
 
-  gap: 10px;
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin-top: 15px;
 }
 
-.apoiar {
-  padding: 6px 13px;
+.tag {
+  padding: 5px 9px;
 
   border: none;
+
   border-radius: 20px;
 
   background: var(--verde-claro);
 
   color: var(--verde);
 
+  font-size: 11px;
+  font-weight: 600;
+
   cursor: pointer;
 }
 
-.apoiar:hover {
-  background: var(--broto);
-
-  color: white;
+.tag:hover {
+  background: #d4e4d1;
 }
 
 .apoios {
-  color: var(--suave);
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 18px;
+  padding-top: 13px;
+
+  color: var(--texto-suave);
 
   font-size: 12px;
 }
 
 
-/* =========================
-   PERFIL
-   ========================= */
+/* ==============================
+   CABEÇALHO DAS PÁGINAS
+============================== */
 
-.perfil {
-  max-width: 700px;
+.pagina-cabecalho {
+  display: flex;
 
-  margin-bottom: 30px;
+  justify-content: space-between;
+  align-items: end;
 
-  padding: 25px;
+  gap: 20px;
 
-  background: white;
-
-  border-radius: 15px;
-
-  box-shadow: 0 4px 18px var(--sombra);
+  margin-bottom: 28px;
 }
 
-.voltar {
-  margin-bottom: 20px;
+.pagina-label {
+  display: block;
 
-  padding: 8px 13px;
+  margin-bottom: 5px;
 
-  border: none;
-  border-radius: 8px;
+  color: var(--broto);
 
-  background: var(--verde-claro);
+  font-size: 11px;
+  font-weight: 800;
 
-  color: var(--verde);
+  letter-spacing: 1.2px;
+}
 
-  cursor: pointer;
+.pagina-cabecalho h2 {
+  margin: 0;
+
+  font-size: 28px;
+}
+
+.pagina-cabecalho p {
+  margin: 5px 0 0;
+
+  color: var(--texto-suave);
+
+  font-size: 14px;
 }
 
 
-/* =========================
+/* ==============================
    GRUPOS
-   ========================= */
+============================== */
 
 .lista-grupos {
-  max-width: 700px;
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(280px, 1fr));
+
+  gap: 18px;
+
+  margin: 0;
 
   padding: 0;
 
@@ -514,117 +694,361 @@ main h2 {
 }
 
 .lista-grupos li {
-  margin-bottom: 12px;
+  padding: 22px;
 
-  padding: 17px;
+  background: var(--branco);
 
-  background: white;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 16px var(--sombra);
+
+  transition: transform .2s ease;
+}
+
+.lista-grupos li:hover {
+  transform: translateY(-3px);
+}
+
+.lista-grupos h3 {
+  margin: 0 0 8px;
+
+  font-size: 18px;
+}
+
+.lista-grupos p {
+  margin: 0;
+
+  color: var(--texto-suave);
+
+  font-size: 14px;
+}
+
+
+/* ==============================
+   PERFIL
+============================== */
+
+.perfil {
+  padding: 28px;
+
+  background: var(--branco);
+
+  border-radius: 18px;
+
+  box-shadow: 0 4px 18px var(--sombra);
+}
+
+.perfil h2 {
+  margin-top: 0;
+
+  font-size: 27px;
+}
+
+.perfil p {
+  color: var(--texto-suave);
+}
+
+.perfil .interesses {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-top: 15px;
+}
+
+
+/* ==============================
+   PÁGINA DA IDEIA
+============================== */
+
+.ideia-detalhe {
+  max-width: 850px;
+
+  padding: 30px;
+
+  background: var(--branco);
+
+  border-radius: 18px;
+
+  box-shadow: 0 4px 18px var(--sombra);
+}
+
+.ideia-detalhe h2 {
+  margin: 0 0 10px;
+
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.ideia-detalhe p {
+  color: #69736c;
+}
+
+.ideia-detalhe .resumo {
+  margin: 25px 0;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+
+/* ==============================
+   FORMULÁRIO
+============================== */
+
+.formulario-container {
+  max-width: 750px;
+
+  margin: 0 auto;
+
+  padding: 30px;
+
+  background: var(--branco);
+
+  border-radius: 18px;
+
+  box-shadow: 0 5px 22px var(--sombra);
+}
+
+.formulario-container h2 {
+  margin: 0;
+
+  font-size: 28px;
+}
+
+.texto-ajuda {
+  margin: 5px 0 28px;
+
+  color: var(--texto-suave);
+}
+
+.campo {
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.campo input,
+.campo textarea {
+  display: block;
+
+  width: 100%;
+
+  padding: 13px 14px;
+
+  border: none;
+  outline: none;
+
+  border-radius: 11px;
+
+  background: #f5f6f2;
+
+  color: var(--texto);
+
+  resize: vertical;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  background: #f0f3ed;
+
+  box-shadow: 0 0 0 2px rgba(79, 122, 82, .12);
+}
+
+.campo small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: var(--texto-suave);
+
+  font-size: 11px;
+}
+
+.erro {
+  min-height: 20px;
+
+  margin: 0 0 12px;
+
+  color: var(--terra);
+
+  font-size: 13px;
+}
+
+
+/* ==============================
+   NOTIFICAÇÕES
+============================== */
+
+.lista-notificacoes {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.notificacao {
+  padding: 18px 20px;
+
+  background: var(--branco);
 
   border-radius: 14px;
 
-  box-shadow: 0 4px 16px var(--sombra);
+  box-shadow: 0 3px 14px var(--sombra);
+
+  transition: background .2s ease;
 }
 
-.lista-grupos .nome {
-  color: var(--verde-escuro);
-
-  font-weight: 700;
+.notificacao.nao-lida {
+  background: var(--verde-suave);
 }
 
-.lista-grupos .quantos {
-  float: right;
+.notificacao p {
+  margin: 0;
 
-  color: var(--suave);
-
-  font-size: 12px;
+  font-size: 14px;
 }
 
-.lista-grupos .descricao {
-  margin: 5px 0 0;
+.notificacao small {
+  display: block;
 
-  color: #4B554E;
-}
+  margin-top: 6px;
 
-
-/* =========================
-   MENSAGEM
-   ========================= */
-
-.mensagem {
-  padding: 18px;
-
-  background: white;
-
-  border-radius: 14px;
-
-  color: var(--suave);
-
-  box-shadow: 0 4px 16px var(--sombra);
+  color: var(--texto-suave);
 }
 
 
-/* =========================
-   ESCONDIDO
-   ========================= */
+/* ==============================
+   ARQUIVO
+============================== */
 
-.escondido {
-  display: none;
+.arquivada {
+  position: relative;
+
+  overflow: hidden;
+}
+
+.arquivada::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 4px;
+
+  background: var(--terra);
 }
 
 
-/* =========================
-   FOOTER
-   ========================= */
+/* ==============================
+   ESTADOS VAZIOS
+============================== */
+
+.vazio {
+  grid-column: 1 / -1;
+
+  padding: 45px 20px;
+
+  text-align: center;
+
+  color: var(--texto-suave);
+
+  background: rgba(255, 255, 255, .55);
+
+  border-radius: 16px;
+}
+
+.vazio strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--texto);
+
+  font-size: 16px;
+}
+
+
+/* ==============================
+   RODAPÉ
+============================== */
 
 footer {
   display: flex;
+
   justify-content: space-between;
+  align-items: center;
 
-  padding: 15px 35px;
+  gap: 20px;
 
-  border-top: 1px solid rgba(38, 48, 42, .06);
+  padding: 22px 7%;
 
-  color: var(--suave);
+  color: var(--texto-suave);
 
   font-size: 12px;
 }
 
+.base {
+  color: var(--verde);
+  font-weight: 600;
+}
 
-/* =========================
-   MOBILE
-   ========================= */
+
+/* ==============================
+   RESPONSIVO
+============================== */
 
 @media (max-width: 700px) {
 
   header {
     flex-direction: column;
+
     align-items: flex-start;
 
-    gap: 12px;
-
-    padding: 18px 20px;
-  }
-
-  .marca {
-    flex-direction: column;
-
-    gap: 2px;
+    padding: 24px 6%;
   }
 
   .sessao {
     width: 100%;
   }
 
-  .sessao select {
-    width: 100%;
+  .abas {
+    padding: 0 4%;
+
+    overflow-x: auto;
   }
 
-  .abas {
-    padding: 0 15px;
+  .aba {
+    flex: 0 0 auto;
+
+    padding: 15px 16px;
   }
 
   main {
-    padding: 25px 18px;
+    width: 90%;
+
+    padding-top: 30px;
+  }
+
+  .mural-topo,
+  .pagina-cabecalho {
+    align-items: flex-start;
+
+    flex-direction: column;
   }
 
   .publicar {
@@ -633,6 +1057,7 @@ footer {
 
   .publicar-footer {
     flex-direction: column;
+
     align-items: stretch;
   }
 
@@ -640,24 +1065,24 @@ footer {
     width: 100%;
   }
 
-  .barra {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  #busca {
-    width: 100%;
-  }
-
-  .cartoes {
+  .cartoes,
+  .lista-grupos {
     grid-template-columns: 1fr;
+  }
+
+  .formulario-container,
+  .ideia-detalhe,
+  .perfil {
+    padding: 22px;
+  }
+
+  .pagina-cabecalho .botao-secundario {
+    width: 100%;
   }
 
   footer {
     flex-direction: column;
 
-    gap: 5px;
-
-    padding: 15px 20px;
+    align-items: flex-start;
   }
 }
