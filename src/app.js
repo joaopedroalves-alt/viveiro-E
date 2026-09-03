@@ -90,9 +90,7 @@ function ideiasVisiveis() {
 
 
     if (casaTexto && casaTag) {
-
       resultado.push(ideia);
-
     }
 
   }
@@ -230,7 +228,6 @@ function desenharMural() {
       estado.tag = null;
 
       desenharMural();
-
     };
 
 
@@ -400,9 +397,7 @@ function montarCartao(ideia) {
 function obterEstado(ideia) {
 
   if (!ideia.estado) {
-
     ideia.estado = "semente";
-
   }
 
   return ideia.estado;
@@ -510,9 +505,7 @@ function desenharPessoa(pessoa) {
       lista.appendChild(
         montarCartao(DADOS.ideias[i])
       );
-
     }
-
   }
 
 
@@ -544,8 +537,7 @@ function desenharGrupos() {
 
   for (var i = 0; i < DADOS.grupos.length; i++) {
 
-    var g =
-      DADOS.grupos[i];
+    var g = DADOS.grupos[i];
 
     var item =
       document.createElement("li");
@@ -593,7 +585,7 @@ function desenharGrupos() {
 }
 
 
-/* ------------------------------------------------ V-03 — publicar ideia */
+/* ------------------------------------------------ V-03 — publicar */
 
 function publicarIdeia(evento) {
 
@@ -616,7 +608,7 @@ function publicarIdeia(evento) {
     document.getElementById("erro-ideia");
 
 
-  /* título é obrigatório */
+  /* título obrigatório */
 
   if (titulo === "") {
 
@@ -633,25 +625,20 @@ function publicarIdeia(evento) {
   erro.textContent = "";
 
 
-  /* cria o próximo ID */
+  /* encontra o maior ID */
 
   var maiorId = 0;
 
   for (var i = 0; i < DADOS.ideias.length; i++) {
 
     if (DADOS.ideias[i].id > maiorId) {
-
-      maiorId =
-        DADOS.ideias[i].id;
+      maiorId = DADOS.ideias[i].id;
     }
+
   }
 
 
-  var novoId =
-    maiorId + 1;
-
-
-  /* transforma as tags em uma lista */
+  /* tags */
 
   var tags = [];
 
@@ -667,14 +654,15 @@ function publicarIdeia(evento) {
         partes[i].trim();
 
       if (tag !== "") {
-
         tags.push(tag);
       }
+
     }
+
   }
 
 
-  /* data de hoje */
+  /* data */
 
   var hoje =
     new Date()
@@ -682,11 +670,11 @@ function publicarIdeia(evento) {
       .split("T")[0];
 
 
-  /* cria a nova ideia */
+  /* nova ideia */
 
   var novaIdeia = {
 
-    id: novoId,
+    id: maiorId + 1,
 
     titulo: titulo,
 
@@ -705,21 +693,19 @@ function publicarIdeia(evento) {
   };
 
 
-  /* coloca a ideia no topo */
+  /* coloca no topo */
 
   DADOS.ideias.unshift(novaIdeia);
 
 
-  /* limpa o formulário */
+  /* limpa formulário */
 
-  document.getElementById("form-ideia")
-    .reset();
+  document.getElementById("form-ideia").reset();
 
 
-  /* mostra a nova ideia imediatamente */
+  /* atualiza mural */
 
   desenharMural();
-
 }
 
 
@@ -754,7 +740,6 @@ function criarCliqueDeApoio(idIdeia) {
 
 
     desenharMural();
-
   };
 }
 
@@ -772,30 +757,30 @@ function trocarAba(qual) {
 
   document.getElementById("mural")
     .className =
-    (qual === "mural")
-      ? ""
-      : "escondido";
+      qual === "mural"
+        ? ""
+        : "escondido";
 
 
   document.getElementById("grupos")
     .className =
-    (qual === "grupos")
-      ? ""
-      : "escondido";
+      qual === "grupos"
+        ? ""
+        : "escondido";
 
 
   document.getElementById("aba-mural")
     .className =
-    (qual === "mural")
-      ? "aba ativa"
-      : "aba";
+      qual === "mural"
+        ? "aba ativa"
+        : "aba";
 
 
   document.getElementById("aba-grupos")
     .className =
-    (qual === "grupos")
-      ? "aba ativa"
-      : "aba";
+      qual === "grupos"
+        ? "aba ativa"
+        : "aba";
 }
 
 
@@ -814,7 +799,6 @@ function iniciar() {
         e.target.value;
 
       desenharMural();
-
     };
 
 
@@ -823,11 +807,8 @@ function iniciar() {
 
       estado.pessoa =
         Number(e.target.value);
-
     };
 
-
-  /* V-03 */
 
   document.getElementById("form-ideia")
     .onsubmit = publicarIdeia;
@@ -837,7 +818,6 @@ function iniciar() {
     .onclick = function () {
 
       trocarAba("mural");
-
     };
 
 
@@ -845,7 +825,6 @@ function iniciar() {
     .onclick = function () {
 
       trocarAba("grupos");
-
     };
 
 
@@ -853,12 +832,10 @@ function iniciar() {
     .onclick = function () {
 
       trocarAba("mural");
-
     };
 
 
   desenhar();
-
 }
 
 
